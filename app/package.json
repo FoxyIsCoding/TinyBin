@@ -1,8 +1,9 @@
 {
-  "name": "app",
+  "name": "paste-fox",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "src/main.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -10,5 +11,10 @@
   },
   "devDependencies": {
     "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.1"
   }
 }
