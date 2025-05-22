@@ -1,4 +1,5 @@
 import dotenv from 'dotenv'
+import { genID } from './url.js';
 dotenv.config()
 
 import mysql from 'mysql2/promise'
@@ -19,13 +20,13 @@ export async function connectDb() {
   return connection
 }
 
+
 export async function addNote(title, text, expiresAt = null) {
   const conn = await connectDb()
-  // Use expiresAt directly, do not reformat
   const [result] = await conn.execute(
-    `INSERT INTO notes (title, text, created_at, expires_at)
-     VALUES (?, ?, CURRENT_TIMESTAMP, ?)`,
-    [title, text, expiresAt]
+    `INSERT INTO notes (title, text, created_at, expires_at, url)
+     VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)`,
+    [title, text, expiresAt, await genID()]
   )
   return result.insertId
 }
@@ -38,6 +39,17 @@ export async function getNoteById(id) {
          FROM notes
          WHERE id = ? AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)`,
         [id]
+    )
+    return rows[0]
+}
+
+export async function getNoteByURL(url) {
+    const conn = await connectDb()
+    const [rows] = await conn.execute(
+        `SELECT id, title, text, created_at, expires_at, url
+         FROM notes
+         WHERE url = ?`,
+        [url]
     )
     return rows[0]
 }

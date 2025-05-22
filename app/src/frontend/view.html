@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Note</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        body {
+            background: #111;
+            color: white;
+            font-family: 'Poppins';
+            justify-content: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 5em;
+            text-align: center;
+            text-decoration: underline;
+            text-underline-offset: 0.2em;
+            animation: heading 1s;
+        }
+
+        @keyframes heading {
+            0% {
+                opacity: 0;
+                translate: 0 .5em;
+            }
+            100% {
+                opacity: 1;
+                translate: 0 0;
+            }
+        }
+        .meta-badges {
+            display: flex;
+            gap: 1em;
+            margin-top: 1em;
+            justify-content: center;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.4em 1em;
+            border-radius: 999px;
+            background: #f0f0f0;
+            color: #333;
+            font-size: 0.95em;
+            font-weight: 500;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .badge.expiring {
+            background: #ffe0e0;
+            color: #b30000;
+        }
+        .badge.created {
+            background: #e0f7fa;
+            color: #00796b;
+        }
+    </style>
+</head>
+<body>
+    <h1>PasteFox Note</h1>
+    <div id="note">
+        <h2 id="note-title"></h2>
+        <pre id="note-text"></pre>
+        <div class="meta-badges" id="note-meta"></div>
+    </div>
+    <script type="module">
+        // Helper to format date as "YYYY-MM-DD HH:mm:ss"
+        function formatDateTime(dtStr) {
+            const d = new Date(dtStr);
+            return d.toLocaleString(undefined, {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false
+            }).replace(',', '');
+        }
+
+        function getExpiringIn(expireStr) {
+            const now = new Date();
+            const expire = new Date(expireStr);
+            const diffMs = expire - now;
+            if (diffMs <= 0) return 'expired';
+            const diffSec = Math.floor(diffMs / 1000);
+            const hours = Math.floor(diffSec / 3600);
+            const minutes = Math.floor((diffSec % 3600) / 60);
+            if (hours > 0) return `Expiring in ${hours}h ${minutes}m`;
+            if (minutes > 0) return `Expiring in ${minutes}m`;
+            return 'Expiring soon';
+        }
+
+        // Get the note url from the path, works for /paste/abc123 or /abc123
+        const urlParts = window.location.pathname.split('/');
+        let noteUrl = urlParts[urlParts.length - 1];
+        if (!noteUrl) noteUrl = urlParts[urlParts.length - 2];
+
+        fetch(`/api/notes/${noteUrl}`)
+            .then(res => {
+                if (!res.ok) throw new Error('Note not found');
+                return res.json();
+            })
+            .then(note => {
+                document.getElementById('note-title').textContent = note.title;
+                document.getElementById('note-text').textContent = note.text;
+
+                const meta = [];
+                if (note.created_at) {
+                    meta.push(`<span class="badge created">Created: ${formatDateTime(note.created_at)}</span>`);
+                }
+                if (note.expires_at) {
+                    meta.push(`<span class="badge expiring">${getExpiringIn(note.expires_at)}</span>`);
+                }
+                document.getElementById('note-meta').innerHTML = meta.join('');
+            })
+            .catch(err => {
+                document.getElementById('note').textContent = 'Note not found.';
+            });
+    </script>
+</body>
+</html>

@@ -18,7 +18,7 @@ export async function startWebServer() {
     app.use(cors());
     app.use(bodyParser.json());
 
-    // Serve static files from the project root
+    // Serve static files
     app.use(express.static(path.join(__dirname, '..', '..')));
     app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
@@ -26,12 +26,37 @@ export async function startWebServer() {
         res.sendFile(path.join(__dirname, '..', '..', 'index.html'));
     });
 
-    app.get('/api/notes/:id', async (req, res) => {
-        const { id } = req.params;
-        const { getNoteById } = await import('./db.js');
-        const note = await getNoteById(id);
+    // REMOVE or comment out this block if you only want to fetch by URL:
+    // app.get('/api/notes/:id', async (req, res) => {
+    //     const { id } = req.params;
+    //     const { getNoteById } = await import('./db.js');
+    //     const note = await getNoteById(id);
+    //     if (note) {
+    //         res.json(note);
+    //     } else {
+    //         res.status(404).send('Note not found');
+    //     }
+    // });
+
+    // This route will now always fetch by URL (string)
+    app.get('/api/notes/:url', async (req, res) => {
+        const { url } = req.params;
+        const { getNoteByURL } = await import('./db.js');
+        const note = await getNoteByURL(url);
         if (note) {
             res.json(note);
+        } else {
+            res.status(404).send('Note not found');
+        }
+    });
+
+    app.get('/paste/:url', async (req, res) => {
+        const { url } = req.params;
+        const { getNoteByURL } = await import('./db.js');
+        const note = await getNoteByURL(url);
+        if (note) {
+            res.sendFile(path.join(__dirname, '..', 'frontend', 'view.html'));
+            app.use(express.static(path.join(__dirname, '..', 'frontend')));
         } else {
             res.status(404).send('Note not found');
         }
@@ -47,6 +72,7 @@ export async function startWebServer() {
     app.get('/new', (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'frontend', 'editor.html'));
     });
+
     app.listen(port, () => {
         console.log(`Server running at http://localhost:${port}/`);
     });
