@@ -3,7 +3,7 @@ dotenv.config()
 
 import mysql from 'mysql2/promise'
 
-let connection
+let connection;
 
 export async function connectDb() {
   if (!connection) {
@@ -21,6 +21,7 @@ export async function connectDb() {
 
 export async function addNote(title, text, expiresAt = null) {
   const conn = await connectDb()
+  // Use expiresAt directly, do not reformat
   const [result] = await conn.execute(
     `INSERT INTO notes (title, text, created_at, expires_at)
      VALUES (?, ?, CURRENT_TIMESTAMP, ?)`,

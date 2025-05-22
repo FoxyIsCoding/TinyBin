@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="editor.js"></script>
+</head>
+<body>
+
+    <h1>Editor</h1>
+    <div class="editor">
+        <input id="title" type="text" placeholder="Title" /><br>
+        <textarea id="text" rows="10" cols="30" placeholder="Note text"></textarea>
+    </div>
+    <div class="buttons">
+        <button class="button-46" role="button" id="saveBtn">SAVE</button>
+        <button class="button-46" role="button">CANCEL</button>
+    </div>
+
+    <script type="module">
+        import { postNote } from './editor.js';
+        document.getElementById('saveBtn').addEventListener('click', postNote);
+    </script>
+</body>
+</html>

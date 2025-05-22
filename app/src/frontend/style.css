@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body {
+    background: #111;
+    color: white;
+    font-family: 'Poppins';
+}
+
+h1 {
+    font-size: 5em;
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    animation: heading 1s;
+}
+
+@keyframes heading {
+    0% {
+        opacity: 0;
+        translate: 0 .5em;
+    }
+    100% {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+}
+
+
+/* CSS */
+.button-46 {
+  align-items: center;
+  background-color: rgba(26, 26, 26, 0.26);
+  border: 1px solid #2c2c2c;
+  border-radius: 16px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  font-family: Inter, sans-serif;
+  font-size: 18px;
+  justify-content: center;
+  line-height: 28px;
+  max-width: 100%;
+  padding: 14px 22px;
+  text-decoration: none;
+  transition: all .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+}
+
+.button-46:active,
+.button-46:hover {
+  outline: 0;
+}
+
+.button-46:hover {
+  background-color: #1b1a1a;
+  border-color: rgba(31, 31, 31, 0.19);
+}
+
+@media (min-width: 768px) {
+  .button-46 {
+    font-size: 20px;
+    min-width: 200px;
+    padding: 14px 16px;
+  }
+}
