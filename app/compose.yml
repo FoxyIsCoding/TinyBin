@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.4
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pastefox
+      MYSQL_USER: pastefox
+      MYSQL_PASSWORD: pastefox
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+    command: sh -c "npm install && npm start"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: pastefox
+      DB_PASSWORD: pastefox
+      DB_NAME: pastefox
+      WEB_PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+
+volumes:
+  db_data:
