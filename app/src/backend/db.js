@@ -72,3 +72,29 @@ export async function removeExpiredNotes() {
     )
     return result.affectedRows
 }
+
+export async function migrateDb() {
+  const conn = await connectDb();
+  await conn.execute(`
+    CREATE TABLE IF NOT EXISTS notes (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      text TEXT NOT NULL,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      expires_at DATETIME,
+      url VARCHAR(32) NOT NULL UNIQUE
+    )
+  `);
+  // Try to create indexes, ignore errors if they already exist
+  try {
+    await conn.execute(`CREATE INDEX idx_expires_at ON notes (expires_at)`);
+  } catch (e) {
+    if (!e.message.includes('Duplicate key name')) throw e;
+  }
+  try {
+    await conn.execute(`CREATE UNIQUE INDEX idx_url ON notes (url)`);
+  } catch (e) {
+    if (!e.message.includes('Duplicate key name')) throw e;
+  }
+  console.log('✅ | Database migrated (tables ensured)');
+}
