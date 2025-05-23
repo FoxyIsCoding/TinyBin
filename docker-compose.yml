@@ -17,7 +17,7 @@ services:
       retries: 10
 
   pastefox:
-    image: ghcr.io/loudbooks/pastefox:latest
+    image: ghcr.io/foxyiscoding/pastefox:latest
     environment:
       DB_HOST: db
       DB_PORT: 3306
