@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: mysql:8.4
@@ -13,6 +11,10 @@ services:
       - pastefox-network
     volumes:
       - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
 
   pastefox:
     image: ghcr.io/loudbooks/pastefox:latest
@@ -28,7 +30,8 @@ services:
     networks:
       - pastefox-network
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 volumes:
   db-data:
