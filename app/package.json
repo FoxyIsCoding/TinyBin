@@ -6,7 +6,7 @@
   "main": "src/main.js",
   "scripts": {
     "dev": "vite dev",
-    "start": "node src/main.js"
+    "start": "cd ./src && node main.js"
   },
   "devDependencies": {
     "vite": "^6.3.5"

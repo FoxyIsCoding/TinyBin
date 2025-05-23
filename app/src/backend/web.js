@@ -22,23 +22,12 @@ export async function startWebServer() {
     app.use(express.static(path.join(__dirname, '..', '..')));
     app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
+    // Serve the landing shit
     app.get('/', (req, res) => {
         res.sendFile(path.join(__dirname, '..', '..', 'index.html'));
     });
 
-    // REMOVE or comment out this block if you only want to fetch by URL:
-    // app.get('/api/notes/:id', async (req, res) => {
-    //     const { id } = req.params;
-    //     const { getNoteById } = await import('./db.js');
-    //     const note = await getNoteById(id);
-    //     if (note) {
-    //         res.json(note);
-    //     } else {
-    //         res.status(404).send('Note not found');
-    //     }
-    // });
-
-    // This route will now always fetch by URL (string)
+    // some W code here to get a note by its url (Prob only dev testing reasons)
     app.get('/api/notes/:url', async (req, res) => {
         const { url } = req.params;
         const { getNoteByURL } = await import('./db.js');
@@ -50,6 +39,7 @@ export async function startWebServer() {
         }
     });
 
+    // We prob all know what this does lol
     app.get('/paste/:url', async (req, res) => {
         const { url } = req.params;
         const { getNoteByURL } = await import('./db.js');
@@ -61,19 +51,20 @@ export async function startWebServer() {
             res.status(404).send('Note not found');
         }
     });
-
+    // This is the api to get a note by its id (This comment is bad. AI said that shit)
     app.post('/api/addnote', async (req, res) => {
         const { title, text, expiresAt } = req.body;
         const { addNote } = await import('./db.js');
         const noteId = await addNote(title, text, expiresAt);
         res.json({ id: noteId });
     });
-
+    // Idk but i have a feeling this is a editor to craete a note
+    // and not a viewer :3
     app.get('/new', (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'frontend', 'editor.html'));
     });
 
     app.listen(port, () => {
-        console.log(`Server running at http://localhost:${port}/`);
+        console.log(`🌐 | Server running at http://localhost:${port}/`);
     });
 }

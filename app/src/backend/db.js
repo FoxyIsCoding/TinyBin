@@ -6,6 +6,9 @@ import mysql from 'mysql2/promise'
 
 let connection;
 
+
+// handles the biig thing of connecting to the database
+// also this shit uses info from .env
 export async function connectDb() {
   if (!connection) {
     connection = await mysql.createConnection({
@@ -15,12 +18,13 @@ export async function connectDb() {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
     })
-    console.log('Connected to DB successfully!')
+    console.log('✅ | Connected to DB successfully :3')
   }
   return connection
 }
 
-
+// yeee soooo idk what you doing here if you dont know what this does
+// but this is a function to add a note to the database
 export async function addNote(title, text, expiresAt = null) {
   const conn = await connectDb()
   const [result] = await conn.execute(
@@ -28,10 +32,12 @@ export async function addNote(title, text, expiresAt = null) {
      VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)`,
     [title, text, expiresAt, await genID()]
   )
+  console.log("📎 | Added new note with id" + result.insertId)
   return result.insertId
 }
 
-
+// ummm ye idk why we need this. Prob just a think that is not so safe to use and should be removed
+// buut im too lazy to do it
 export async function getNoteById(id) {
     const conn = await connectDb()
     const [rows] = await conn.execute(
@@ -43,6 +49,7 @@ export async function getNoteById(id) {
     return rows[0]
 }
 
+// this think handles the url suprisingly
 export async function getNoteByURL(url) {
     const conn = await connectDb()
     const [rows] = await conn.execute(
@@ -54,6 +61,9 @@ export async function getNoteByURL(url) {
     return rows[0]
 }
 
+// removes expired notes from the database
+// pretty self explanatory
+// this is called every 69 (5) mins in the loop.js file
 export async function removeExpiredNotes() {
     const conn = await connectDb()
     const [result] = await conn.execute(

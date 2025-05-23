@@ -1,8 +1,10 @@
-function toMySQLDate(date) {
+function toMySQLDateTime(date) {
     const pad = n => n.toString().padStart(2, '0');
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
+// some nerdy stuff
+// probably make the note post and expire
 export async function postNote() {
     const title = document.getElementById('title').value;
     const text = document.getElementById('text').value;
@@ -10,8 +12,8 @@ export async function postNote() {
         alert('Please fill in both title and text fields.');
         return;
     }
-    // Set expiresAt to 24 hours from now in MySQL DATETIME format
-    const expiresAt = toMySQLDate(new Date(Date.now() + 24 * 60 * 60 * 1000));
+
+    const expiresAt = toMySQLDateTime(new Date(Date.now() + 24 * 60 * 60 * 1000));
     console.log('expiresAt being sent:', expiresAt);
 
     const response = await fetch('/api/addnote', {

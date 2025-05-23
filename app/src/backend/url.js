@@ -1,6 +1,10 @@
 import { randomBytes } from 'crypto';
 import { connectDb } from './db.js';
 
+
+// dont have to explain this one
+// this is a function to generate a random id for the notes
+// frick i explained it anyways damm
 export async function genID(length = 12) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
