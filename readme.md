@@ -21,7 +21,7 @@ Easily self-host with Docker!
 ### 1. Clone the Repo
 
 ```sh
-git clone https://github.com/YOUR_USERNAME/pastefox.git
+git clone https://github.com/FoxyIsCoding/pastefox.git
 cd pastefox/app
 ```
 
@@ -97,4 +97,4 @@ MIT
 
 ---
 
-> Made with 🦊 by a 15-year-old dev who loves open source!
+> Made by a 15-year-old dev who loves open source!
