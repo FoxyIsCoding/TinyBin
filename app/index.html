@@ -10,9 +10,103 @@
   </head>
   <body>
     <h1>Paste Fox</h1>
-
-    <div class="buttons">
-      <button class="button-46" role="button" onclick="window.location.href='/new'">NEW</button>
-    </div>
+    <main>
+      <div class="buttons">
+        <button class="button-46" role="button" onclick="window.location.href='/new'">NEW</button>
+      </div>
+    </main>
+    <!-- Ko-fi Support Box Start -->
+    <a href="https://ko-fi.com/foxyk" target="_blank" rel="noopener" class="kofi-support-box">
+      <img src="https://storage.ko-fi.com/cdn/cup-border.png" alt="Buy Me a Coffee" class="kofi-cup">
+      <div class="kofi-info">
+        <div class="kofi-title">PasteFox</div>
+        <div class="kofi-desc">
+          is a project I develop in my free time and want to keep this project ad-free and open source.<br>
+          <span style="opacity:0.8;">I'm 15 years old and any kind of support would mean a lot to me.</span><br>
+          <span class="kofi-cta"><b>Support me on Ko-fi</b> ☕</span>
+        </div>
+      </div>
+    </a>
+    <style>
+    .kofi-support-box {
+      position: fixed;
+      left: 50%;
+      bottom: 2.5em;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      background: #18160f;
+      border: 2px solid #ffe066;
+      border-radius: 1.2em;
+      box-shadow: 0 2px 12px 0 rgba(255, 224, 102, 0.13);
+      padding: 1.1em 1.3em;
+      max-width: 800px;
+      width: 90vw;
+      font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+      font-size: 1.08em;
+      
+      color: #ffe066;
+      text-decoration: none;
+      transition: box-shadow 0.18s, border-color 0.18s, background 0.18s;
+      cursor: pointer;
+    }
+    .kofi-support-box:hover, .kofi-support-box:focus {
+      box-shadow: 0 4px 24px 0 rgba(255, 224, 102, 0.22);
+      border-color: #ffb700;
+      background: #23210f;
+      text-decoration: none;
+    }
+    .kofi-cup {
+      width: 50px;
+      height: 45px;
+      flex-shrink: 0;
+    }
+    .kofi-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .kofi-title {
+      font-size: 1.18em;
+      font-weight: 700;
+      margin-bottom: 0.2em;
+      color: #ffe066;
+      letter-spacing: 0.5px;
+    }
+    .kofi-desc {
+      font-size: 1em;
+      color: #ffe066;
+      line-height: 1.5;
+    }
+    .kofi-cta {
+      display: inline-block;
+      margin-top: 0.3em;
+      color: #ffb700;
+      font-weight: 700;
+      font-size: 1.04em;
+      letter-spacing: 0.2px;
+    }
+    @media (max-width: 600px) {
+      .kofi-support-box {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1em 1em;
+        max-width: 300px;
+        width: 98vw;
+        font-size: 1em;
+        left: 50%;
+        bottom: 1em;
+        transform: translateX(-50%);
+      }
+      .kofi-cup {
+        margin-bottom: 0.5em;
+      }
+      .kofi-title {
+        font-size: 1.08em;
+      }
+    }
+    </style>
+    <!-- Ko-fi Support Box End -->
   </body>
 </html>

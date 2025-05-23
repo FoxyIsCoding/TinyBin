@@ -39,14 +39,14 @@ export async function addNote(title, text, expiresAt = null) {
 // ummm ye idk why we need this. Prob just a think that is not so safe to use and should be removed
 // buut im too lazy to do it
 export async function getNoteById(id) {
-    const conn = await connectDb()
+    const conn = await connectDb();
     const [rows] = await conn.execute(
-        `SELECT id, title, text, created_at, expires_at
+        `SELECT id, title, text, created_at, expires_at, url
          FROM notes
          WHERE id = ? AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)`,
         [id]
-    )
-    return rows[0]
+    );
+    return rows[0];
 }
 
 // this think handles the url suprisingly

@@ -8,6 +8,7 @@ dotenv.config()
 
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { url } from 'inspector';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -54,9 +55,12 @@ export async function startWebServer() {
     // This is the api to get a note by its id (This comment is bad. AI said that shit)
     app.post('/api/addnote', async (req, res) => {
         const { title, text, expiresAt } = req.body;
-        const { addNote } = await import('./db.js');
+        const { addNote, getNoteById } = await import('./db.js');
         const noteId = await addNote(title, text, expiresAt);
-        res.json({ id: noteId });
+        const note = await getNoteById(noteId);
+        console.log('Returned note:', note);
+        res.json({ id: noteId, url: note.url });
+        
     });
     // Idk but i have a feeling this is a editor to craete a note
     // and not a viewer :3

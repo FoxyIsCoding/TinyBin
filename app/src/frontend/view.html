@@ -65,6 +65,7 @@
         <h2 id="note-title"></h2>
         <pre id="note-text"></pre>
         <div class="meta-badges" id="note-meta"></div>
+        <button class="button-46" role="button" id="copy">Copy URL</button>
     </div>
     <script type="module">
         // Helper to format date as "YYYY-MM-DD HH:mm:ss"
@@ -116,6 +117,11 @@
             .catch(err => {
                 document.getElementById('note').textContent = 'Note not found.';
             });
+
+        document.getElementById('copy').addEventListener('click', () => {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Copied to clipboard!');
+        });
     </script>
 </body>
 </html>
