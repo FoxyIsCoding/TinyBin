@@ -18,17 +18,16 @@ Easily self-host with Docker!
 
 ## 🚀 Quick Start (Docker Compose)
 
-### 1. Clone the Repo
+### 1. Download `docker-compose.yml`
 
 ```sh
-git clone https://github.com/FoxyIsCoding/pastefox.git
-cd pastefox/app
+curl -O -L https://github.com/FoxyIsCoding/PasteFox/raw/refs/heads/main/docker-compose.yml
 ```
 
 ### 2. Start Everything with Docker Compose
 
 ```sh
-docker-compose -f compose.yml up --build
+docker-compose up
 ```
 
 - This will:
@@ -42,29 +41,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🛠️ Project Structure
-
-```
-app/
-├── src/
-│   ├── backend/      # Express, DB, API logic
-│   ├── frontend/     # HTML, CSS, JS for UI
-│   └── main.js       # App entrypoint
-├── compose.yml       # Docker Compose config
-├── Dockerfile        # App Dockerfile
-├── package.json
-└── index.html        # Landing page
-```
-
----
-
 ## 🐳 Docker Compose Details
 
-- **MySQL** runs on port `3306`, data is persisted in a Docker volume.
-- **PasteFox App** runs on port `3000`.
+- **MySQL** runs privately on port `3306`, with data persisted in a Docker volume.
+- **PasteFox App** runs publically on port `3000`.
 - Environment variables are set automatically for DB connection.
 
-**You can customize DB credentials in `compose.yml` if needed.**
+**You can customize DB credentials in `docker-compose.yml` if needed.**
 
 ---
 
