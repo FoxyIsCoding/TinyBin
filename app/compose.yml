@@ -14,7 +14,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
-  app:
+  pastefox:
     build:
       context: .
     command: sh -c "npm install && npm start"
