@@ -33,13 +33,42 @@
                 translate: 0 0;
             }
         }
+
+        #note {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+        }
+
+        .note-box {
+            background-color: rgba(26, 26, 26, 0.26);
+            border: 1px solid #2c2c2c;
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            width: 50vw;
+            max-width: 50vw;
+            resize: none;
+            font-size: 1.1rem;
+            overflow: auto;
+            
+        }
+
+        pre {
+            white-space: pre-wrap;
+            text-align: left;
+            word-break: normal;
+            word-wrap: normal;
+        }
+
         .meta-badges {
+            margin: 1em 0;
             display: flex;
             gap: 1em;
-            margin-top: 1em;
             justify-content: center;
         }
-        .badge {
+        .badge{
             display: inline-block;
             padding: 0.4em 1em;
             border-radius: 999px;
@@ -57,15 +86,44 @@
             background: #e0f7fa;
             color: #00796b;
         }
+        .button-46 {
+            background: #398fea;
+            border: none;
+            color: white;
+            font-size: 0.95em;
+            padding: 10px 20px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .button-46:hover {
+            background: #3589e3;
+            transform: scale(1.05);
+        }
+        .button-46:active {
+            transform: scale(0.95);
+        }
+        
+        .buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1em;
+        }
     </style>
 </head>
 <body>
     <h1>PasteFox Note</h1>
     <div id="note">
         <h2 id="note-title"></h2>
-        <pre id="note-text"></pre>
-        <div class="meta-badges" id="note-meta"></div>
-        <button class="button-46" role="button" id="copy">Copy URL</button>
+        <div class="note-box">
+            <pre id="note-text"></pre>
+        </div>
+
+        <div class="buttons">
+            <div class="meta-badges" id="note-meta"></div>
+            <button class="button-46" role="button" id="copy">Copy URL</button>
+        </div>
     </div>
     <script type="module">
         // Helper to format date as "YYYY-MM-DD HH:mm:ss"

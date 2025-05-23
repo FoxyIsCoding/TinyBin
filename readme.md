@@ -97,8 +97,3 @@ MIT
 
 ---
 
-<<<<<<< HEAD:readme.md
-> Made by a 15-year-old dev who loves open source!
-=======
-> Made by a 15-year-old dev who loves open source!
->>>>>>> 9c65c32 (Renamed the docker app instance to pastefox):readme
