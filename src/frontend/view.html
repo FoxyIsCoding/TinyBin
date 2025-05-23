@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>View Note</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
@@ -55,7 +56,7 @@
             
         }
 
-        pre {
+        .note-text {
             white-space: pre-wrap;
             text-align: left;
             word-break: normal;
@@ -136,7 +137,7 @@
     <div id="note">
         <h2 id="note-title"></h2>
         <div class="note-box">
-            <pre id="note-text"></pre>
+            <div id="note-text"></div>
         </div>
 
         <div class="buttons">
@@ -144,61 +145,6 @@
             <button class="button-46" role="button" id="copy">Copy URL</button>
         </div>
     </div>
-    <script type="module">
-        // Helper to format date as "YYYY-MM-DD HH:mm:ss"
-        function formatDateTime(dtStr) {
-            const d = new Date(dtStr);
-            return d.toLocaleString(undefined, {
-                year: 'numeric', month: '2-digit', day: '2-digit',
-                hour: '2-digit', minute: '2-digit', second: '2-digit',
-                hour12: false
-            }).replace(',', '');
-        }
-
-        function getExpiringIn(expireStr) {
-            const now = new Date();
-            const expire = new Date(expireStr);
-            const diffMs = expire - now;
-            if (diffMs <= 0) return 'expired';
-            const diffSec = Math.floor(diffMs / 1000);
-            const hours = Math.floor(diffSec / 3600);
-            const minutes = Math.floor((diffSec % 3600) / 60);
-            if (hours > 0) return `Expiring in ${hours}h ${minutes}m`;
-            if (minutes > 0) return `Expiring in ${minutes}m`;
-            return 'Expiring soon';
-        }
-
-        // Get the note url from the path, works for /paste/abc123 or /abc123
-        const urlParts = window.location.pathname.split('/');
-        let noteUrl = urlParts[urlParts.length - 1];
-        if (!noteUrl) noteUrl = urlParts[urlParts.length - 2];
-
-        fetch(`/api/notes/${noteUrl}`)
-            .then(res => {
-                if (!res.ok) throw new Error('Note not found');
-                return res.json();
-            })
-            .then(note => {
-                document.getElementById('note-title').textContent = note.title;
-                document.getElementById('note-text').textContent = note.text;
-
-                const meta = [];
-                if (note.created_at) {
-                    meta.push(`<span class="badge created">Created: ${formatDateTime(note.created_at)}</span>`);
-                }
-                if (note.expires_at) {
-                    meta.push(`<span class="badge expiring">${getExpiringIn(note.expires_at)}</span>`);
-                }
-                document.getElementById('note-meta').innerHTML = meta.join('');
-            })
-            .catch(err => {
-                document.getElementById('note').textContent = 'Note not found.';
-            });
-
-        document.getElementById('copy').addEventListener('click', () => {
-            navigator.clipboard.writeText(window.location.href);
-            alert('Copied to clipboard!');
-        });
-    </script>
+<script type="module" src="/src/frontend/view.js"></script>
 </body>
 </html>
