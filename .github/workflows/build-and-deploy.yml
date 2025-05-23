@@ -55,8 +55,8 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache-pastefox
           cache-to: type=local,dest=/tmp/.buildx-cache-pastefox-new,mode=max
           tags: |
-            ghcr.io/loudbooks/pastefox-pastefox:${{ env.tag }}
-            ghcr.io/loudbooks/pastefox-pastefox:${{ env.hash }}
+            ghcr.io/loudbooks/pastefox:${{ env.tag }}
+            ghcr.io/loudbooks/pastefox:${{ env.hash }}
 
       - name: Move updated Docker cache
         run: |
