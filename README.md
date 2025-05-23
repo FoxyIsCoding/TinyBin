@@ -9,10 +9,9 @@ Easily self-host with Docker!
 ## ✨ Features
 
 - 📝 Create and share notes with unique URLs
-- ⏳ Notes auto-expire after 24 hours
-- ⚡ Fast and simple UI, dark mode by default
+- ⏳ Notes auto-expire after 24 hours or more
+- ⚡ Fast and simple UI
 - 🐳 Easy Docker Compose setup
-- 💾 MySQL-backed, open source, no ads
 
 ---
 
