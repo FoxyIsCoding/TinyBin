@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: mysql:8.4
@@ -9,15 +7,17 @@ services:
       MYSQL_DATABASE: pastefox
       MYSQL_USER: pastefox
       MYSQL_PASSWORD: pastefox
-    ports:
-      - "3306:3306"
+    networks:
+      - pastefox-network
     volumes:
-      - db_data:/var/lib/mysql
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
 
   pastefox:
-    build:
-      context: .
-    command: sh -c "npm install && npm start"
+    image: ghcr.io/foxyiscoding/pastefox:latest
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -27,10 +27,15 @@ services:
       WEB_PORT: 3000
     ports:
       - "3000:3000"
+    networks:
+      - pastefox-network
     depends_on:
-      - db
-    volumes:
-      - .:/usr/src/app
+      db:
+        condition: service_healthy
 
 volumes:
-  db_data:
+  db-data:
+
+networks:
+  pastefox-network:
+    driver: bridge
