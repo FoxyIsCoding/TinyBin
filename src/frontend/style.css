@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 body {
-    background: #111;
+    background: #0a0a0a;
     color: white;
     font-family: 'Poppins';
 }
@@ -118,4 +118,36 @@ textarea {
 
 input:focus, textarea:focus {
   outline: none;
+}
+
+.qr {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border-radius: 10px;
+  border: solid rgba(28, 28, 28, 0.815) 1px;
+  align-items: center;
+}
+
+.canvas {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+}
+
+.links {
+  padding: 20px;
+  border-radius: 10px;
+  border: solid rgba(28, 28, 28, 0.815) 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+
+.share {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
 }

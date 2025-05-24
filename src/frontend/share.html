@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyBin</title>
+    <link rel="stylesheet" href="../style.css">
+    <script type="module" src="../share.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    
+</head>
+<body>
+    <h1>TinyBin</h1>
+    <main>
+        <div class="share">
+            <div class="links">
+                <p>Share your note with the following link:</p>
+                <input id="shareLink" type="text" readonly />
+                <div class="buttons">
+                    <button class="button-46" role="button" id="copyBtn">COPY</button>
+                    <button class="button-46" role="button" id="openBtn">OPEN</button>
+                </div>
+            </div>
+            <div class="qr">
+                <p>Scan the QR code to view your note:</p><br>
+                <div id="canvas"></div>
+            </div>
+
+        </div>
+    </main>
+    <script type="module">
+    const url = new URL(window.location.href);
+    const pasteUrl = url.href.replace('/share/', '/paste/');
+
+    const qrCode = new QRCodeStyling({
+        width: 150,
+        height: 150,
+        data: pasteUrl,
+        dotsOptions: {
+            color: "#000",
+            type: "rounded"
+        },
+        cornersSquareOptions: {
+            type: "extra-rounded"
+        },
+        
+        
+    });
+
+    qrCode.append(document.getElementById("canvas"));
+    
+    </script>
+    
+</body>
+</html>

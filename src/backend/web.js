@@ -52,6 +52,19 @@ export async function startWebServer() {
             res.status(404).send('Note not found');
         }
     });
+
+    app.get('/share/:url', async (req, res) => {
+        const { url } = req.params;
+        const { getNoteByURL } = await import('./db.js');
+        const note = await getNoteByURL(url);
+        if (note) {
+            res.sendFile(path.join(__dirname, '..', 'frontend', 'share.html'));
+            app.use(express.static(path.join(__dirname, '..', 'frontend')));
+        } else {
+            res.status(404).send('Note not found');
+        }
+    });
+
     // This is the api to get a note by its id (This comment is bad. AI said that shit)
     app.post('/api/addnote', async (req, res) => {
         const { title, text, expiresAt } = req.body;

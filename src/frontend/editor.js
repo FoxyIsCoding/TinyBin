@@ -51,7 +51,7 @@ export async function postNote() {
 
     if (response.ok) {
         const data = await response.json();
-        window.location.href = `/paste/${data.url}`;
+        window.location.href = `/share/${data.url}`;
         console.log('Note added with ID:', data.url);
     } else {
         console.error('Error adding note');
