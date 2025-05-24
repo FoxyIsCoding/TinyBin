@@ -88,6 +88,16 @@ main {
   align-items: center;
 }
 
+select {
+  background-color: rgba(26, 26, 26, 0.26);
+  border: 1px solid #2c2c2c;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  width: 35vw;
+  max-width: 35vw;
+}
+
 input, textarea {
   background-color: rgba(26, 26, 26, 0.26);
   border: 1px solid #2c2c2c;

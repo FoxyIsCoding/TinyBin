@@ -61,6 +61,7 @@ export async function startWebServer() {
         console.log('Returned note:', note);
         res.json({ id: noteId, url: note.url });
         
+        
     });
     // Idk but i have a feeling this is a editor to craete a note
     // and not a viewer :3

@@ -43,7 +43,7 @@ export async function getNoteById(id) {
     const [rows] = await conn.execute(
         `SELECT id, title, text, created_at, expires_at, url
          FROM notes
-         WHERE id = ? AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)`,
+         WHERE id = ?`, 
         [id]
     );
     return rows[0];

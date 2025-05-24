@@ -16,10 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const expire = new Date(expireStr);
         const diffMs = expire - now;
         if (diffMs <= 0) return 'expired';
+
         const diffSec = Math.floor(diffMs / 1000);
-        const hours = Math.floor(diffSec / 3600);
+        const months = Math.floor(diffSec / (30 * 24 * 3600));
+        const weeks = Math.floor((diffSec % (30 * 24 * 3600)) / (7 * 24 * 3600));
+        const days = Math.floor((diffSec % (7 * 24 * 3600)) / (24 * 3600));
+        const hours = Math.floor((diffSec % (24 * 3600)) / 3600);
         const minutes = Math.floor((diffSec % 3600) / 60);
-        if (hours > 0) return `Expiring in ${hours}h ${minutes}m`;
+
+        if (months > 0) return `Expiring in ${months}mo${weeks > 0 ? ' ' + weeks + 'w' : ''}`;
+        if (weeks > 0) return `Expiring in ${weeks}w${days > 0 ? ' ' + days + 'd' : ''}`;
+        if (days > 0) return `Expiring in ${days}d${hours > 0 ? ' ' + hours + 'h' : ''}`;
+        if (hours > 0) return `Expiring in ${hours}h${minutes > 0 ? ' ' + minutes + 'm' : ''}`;
         if (minutes > 0) return `Expiring in ${minutes}m`;
         return 'Expiring soon';
     }
