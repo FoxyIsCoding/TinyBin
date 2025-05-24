@@ -1,6 +1,6 @@
-# PasteFox
+# TinyBin
 
-PasteFox is a modern, minimal, and ad-free pastebin for your notes and code.  
+TinyBin is a modern, minimal, and ad-free pastebin for your notes and code.  
 Built with Node.js, Express, and MySQL.  
 Easily self-host with Docker!
 
@@ -20,7 +20,7 @@ Easily self-host with Docker!
 ### 1. Download `docker-compose.yml`
 
 ```sh
-curl -O -L https://github.com/FoxyIsCoding/PasteFox/raw/refs/heads/main/docker-compose.yml
+curl -O -L https://github.com/FoxyIsCoding/TinyBin/raw/refs/heads/main/docker-compose.yml
 ```
 
 ### 2. Start Everything with Docker Compose
