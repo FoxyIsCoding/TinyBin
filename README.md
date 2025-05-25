@@ -73,6 +73,17 @@ Your support keeps PasteFox ad-free and open source.
 
 ---
 
+## 🔑 Credit
+
+Huge thank you to [Error](https://github.com/Err0r430) for major help rewriting backend structure and migration to a more sophisticated stack. 
+Huge thank you to [Loudbook](https://github.com/Loudbooks) for design inspiration and Docker help.
+
+---
+
+
+
+---
+
 ## 📄 License
 
 MIT
