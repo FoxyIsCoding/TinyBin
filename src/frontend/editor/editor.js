@@ -8,8 +8,8 @@ function expireSelectionToTime(expireSelection) {
     const now = new Date();
     let expireTime;
     switch (expireSelection) {
-        case '1h':
-            expireTime = 60 * 60; // 1 hour
+        case '3h':
+            expireTime = 3 * 60 * 60; // 3 hours
             break;
         case '1d':
             expireTime = 24 * 60 * 60; // 24 hours
