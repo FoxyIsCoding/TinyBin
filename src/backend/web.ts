@@ -1,15 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-const app = express();
-
-import dotenv from 'dotenv';
-dotenv.config()
-
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { url } from 'inspector';
+import { create_note, get_note_by_id, get_note_by_url } from '../queries/notes.js';
 
+const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -23,16 +19,15 @@ export async function startWebServer() {
     app.use(express.static(path.join(__dirname, '..', '..')));
     app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-    // Serve the landing shit
+    // Serve the landing page
     app.get('/', (req, res) => {
         res.sendFile(path.join(__dirname, '..', '..', 'index.html'));
     });
 
-    // some W code here to get a note by its url (Prob only dev testing reasons)
+    // Get note by URL
     app.get('/api/notes/:url', async (req, res) => {
         const { url } = req.params;
-        const { getNoteByURL } = await import('./db.js');
-        const note = await getNoteByURL(url);
+        const note = await get_note_by_url(url);
         if (note) {
             res.json(note);
         } else {
@@ -40,11 +35,10 @@ export async function startWebServer() {
         }
     });
 
-    // We prob all know what this does lol
+    // View note page
     app.get('/paste/:url', async (req, res) => {
         const { url } = req.params;
-        const { getNoteByURL } = await import('./db.js');
-        const note = await getNoteByURL(url);
+        const note = await get_note_by_url(url);
         if (note) {
             res.sendFile(path.join(__dirname, '..', 'frontend', 'view', 'view.html'));
             app.use(express.static(path.join(__dirname, '..', 'frontend', 'view')));
@@ -54,39 +48,32 @@ export async function startWebServer() {
         }
     });
 
+    // Share note page
     app.get('/share/:url', async (req, res) => {
         const { url } = req.params;
-        const { getNoteByURL } = await import('./db.js');
-        const note = await getNoteByURL(url);
+        const note = await get_note_by_url(url);
         if (note) {
             res.sendFile(path.join(__dirname, '..', 'frontend', 'share', 'share.html'));
             app.use(express.static(path.join(__dirname, '..', 'frontend', 'share')));
             app.use(express.static(path.join(__dirname, '..', 'frontend')));
-            
         } else {
             res.status(404).send('Note not found');
         }
     });
 
-
-    // Idk but i have a feeling this is a editor to craete a note
-    // and not a viewer :3
+    // Editor page
     app.get('/new', (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'frontend', 'editor', 'editor.html'));
         app.use(express.static(path.join(__dirname, '..', 'frontend', 'editor')));
     });
 
-
-    // This is the api to get a note by its id (This comment is bad. AI said that shit)
+    // Create new note
     app.post('/api/addnote', async (req, res) => {
         const { title, text, expiresAt } = req.body;
-        const { addNote, getNoteById } = await import('./db.js');
-        const noteId = await addNote(title, text, expiresAt);
-        const note = await getNoteById(noteId);
+        const noteId = await create_note(title, text, expiresAt ? new Date(expiresAt) : null);
+        const note = await get_note_by_id(noteId);
         console.log('Returned note:', note);
         res.json({ id: noteId, url: note.url });
-        
-        
     });
 
     app.listen(port, () => {

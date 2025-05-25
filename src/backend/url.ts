@@ -1,5 +1,7 @@
 import { randomBytes } from 'crypto';
-import { connectDb } from './db.js';
+import { db } from '../db/index.js';
+import { notes } from '../db/schema.js';
+import { eq } from 'drizzle-orm';
 
 
 // dont have to explain this one
@@ -9,7 +11,6 @@ export async function genID(length = 12) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     let exists = true;
-    const conn = await connectDb();
 
     while (exists) {
         result = '';
@@ -19,11 +20,8 @@ export async function genID(length = 12) {
             result += chars[index];
         }
         
-        const [rows] = await conn.execute(
-            'SELECT 1 FROM notes WHERE url = ? LIMIT 1',
-            [result]
-        );
-        exists = rows.length > 0;
+        const existing = await db.select().from(notes).where(eq(notes.url, result));
+        exists = existing.length > 0;
     }
     return result;
 }
