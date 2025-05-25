@@ -46,7 +46,8 @@ export async function startWebServer() {
         const { getNoteByURL } = await import('./db.js');
         const note = await getNoteByURL(url);
         if (note) {
-            res.sendFile(path.join(__dirname, '..', 'frontend', 'view.html'));
+            res.sendFile(path.join(__dirname, '..', 'frontend', 'view', 'view.html'));
+            app.use(express.static(path.join(__dirname, '..', 'frontend', 'view')));
             app.use(express.static(path.join(__dirname, '..', 'frontend')));
         } else {
             res.status(404).send('Note not found');
@@ -58,12 +59,23 @@ export async function startWebServer() {
         const { getNoteByURL } = await import('./db.js');
         const note = await getNoteByURL(url);
         if (note) {
-            res.sendFile(path.join(__dirname, '..', 'frontend', 'share.html'));
+            res.sendFile(path.join(__dirname, '..', 'frontend', 'share', 'share.html'));
+            app.use(express.static(path.join(__dirname, '..', 'frontend', 'share')));
             app.use(express.static(path.join(__dirname, '..', 'frontend')));
+            
         } else {
             res.status(404).send('Note not found');
         }
     });
+
+
+    // Idk but i have a feeling this is a editor to craete a note
+    // and not a viewer :3
+    app.get('/new', (req, res) => {
+        res.sendFile(path.join(__dirname, '..', 'frontend', 'editor', 'editor.html'));
+        app.use(express.static(path.join(__dirname, '..', 'frontend', 'editor')));
+    });
+
 
     // This is the api to get a note by its id (This comment is bad. AI said that shit)
     app.post('/api/addnote', async (req, res) => {
@@ -75,11 +87,6 @@ export async function startWebServer() {
         res.json({ id: noteId, url: note.url });
         
         
-    });
-    // Idk but i have a feeling this is a editor to craete a note
-    // and not a viewer :3
-    app.get('/new', (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'frontend', 'editor.html'));
     });
 
     app.listen(port, () => {

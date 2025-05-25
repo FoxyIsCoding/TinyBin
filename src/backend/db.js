@@ -49,6 +49,7 @@ export async function getNoteById(id) {
     return rows[0];
 }
 
+
 // this think handles the url suprisingly
 export async function getNoteByURL(url) {
     const conn = await connectDb()
