@@ -1,29 +1,24 @@
 services:
   db:
-    image: mysql:8.4
+    image: postgres:latest
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: pastefox
-      MYSQL_USER: pastefox
-      MYSQL_PASSWORD: pastefox
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tinybin
     networks:
       - pastefox-network
     volumes:
       - db-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 5s
+      timeout: 2s
       retries: 10
 
   pastefox:
     image: ghcr.io/foxyiscoding/pastefox:latest
     environment:
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_USER: pastefox
-      DB_PASSWORD: pastefox
-      DB_NAME: pastefox
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
       WEB_PORT: 3000
     ports:
       - "3000:3000"

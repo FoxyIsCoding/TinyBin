@@ -4,12 +4,12 @@ Follow a format where you have "queries" functions which interact with the datab
 
 import { db } from '../db/index.js';
 import { notes } from '../db/schema.js';
-import { genID } from '../backend/url.js';
+import { generateNoteId } from '../utils/id';
 import { eq, lt, isNotNull, and } from 'drizzle-orm';
 
 // Export exports it where you can impot via {create_note}
-export async function create_note(title: string, text: string, expiresAt: Date | null = null): Promise<string> {
-      const url = await genID();
+export async function createNote(title: string, text: string, expiresAt: Date | null = null): Promise<string> {
+      const url = await generateNoteId();
       const inserted = await db.insert(notes).values({
         title,
         text,
@@ -21,12 +21,12 @@ export async function create_note(title: string, text: string, expiresAt: Date |
       return String(inserted[0]?.id);
 };
 
-export async function get_note_by_id(id: string) {
+export async function getNoteById(id: string) {
   const result = await db.select().from(notes).where(eq(notes.id, parseInt(id)));
   return result[0];
 }
 
-export async function get_note_by_url(url: string) {
+export async function getNoteByUrl(url: string) {
   const result = await db.select().from(notes).where(eq(notes.url, url));
   return result[0];
 }

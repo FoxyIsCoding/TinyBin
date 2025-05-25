@@ -1,20 +1,12 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import { removeExpiredNotes } from './queries/notes.js';
-import { db, sql } from './db/index.js';
-import { loop } from './backend/loop.js';
-import { startWebServer } from './backend/web.js';
+import { loop } from './db/utils';
+import { startWebServer } from './modules/Server';
 
 
 // Setup and load all components
 async function start() {
   try {
     console.log('⌚ | Starting application...');
-    
-    // Test database connection
-    await db.execute(sql`SELECT 1`);
-    console.log("🆕 | Database connected successfully");
-    
     await startupCheck();
     console.log("🆕 | Starting web server");
     await startWebServer();

@@ -79,3 +79,10 @@ MIT
 
 ---
 
+---
+## 🔑 Credits
+
+Huge thank you to [Loudbook](https://github.com/Loudbooks) for design inspiration and Docker help.
+Huge thank you to [Error](https://github.com/Err0r430) for writing out a better backend structure and consulting on how to migrate to a more sophisticated stack. Couldnt have done it without him.
+
+---
