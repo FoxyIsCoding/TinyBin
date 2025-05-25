@@ -13,6 +13,9 @@
         hr.solid {
             border-top: 0.5px solid #0a0a0a3a;
         }   
+        #canvas {
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -51,8 +54,11 @@
         height: 150,
         data: pasteUrl,
         dotsOptions: {
-            color: "#000",
+            color: "#ffff",
             type: "rounded"
+        },
+        backgroundOptions: {
+            color: "#0a0a0a"
         },
         cornersSquareOptions: {
             type: "extra-rounded"
