@@ -24,21 +24,25 @@ function expireSelectionToTime(expireSelection) {
     return expireTime;
 }
 
+
+    const title = document.getElementById('title').value;
+    const text = document.getElementById('text').value;
+    
+
+
 // some nerdy stuff
 // probably make the note post and expire
 export async function postNote() {
     const title = document.getElementById('title').value;
     const text = document.getElementById('text').value;
-    const expires = document.getElementById('expireDate').value;
+    // Get selected expiration value from radio buttons
+    const expires = document.querySelector('input[name="expire"]:checked').value;
     if (!title || !text) {
         alert('Please fill in both title and text fields.');
         return;
     }
-    // the most chaotic way to get the expiration date
-    // this is a bit of a mess, but it works
     const convertToTime = expireSelectionToTime(expires) * 1000;
-    const finalDate = toMySQLDateTime(new Date(Date.now() + convertToTime));
-    const expiresAt = finalDate;
+    const expiresAt = toMySQLDateTime(new Date(Date.now() + convertToTime));
     console.log('expiresAt being sent:', expiresAt);
 
     const response = await fetch('/api/addnote', {
@@ -58,3 +62,44 @@ export async function postNote() {
         alert('Error saving note');
     }
 }
+
+// Enable/disable save button based on input fields
+function updateSaveButtonState() {
+    const title = document.getElementById('title').value.trim();
+    const text = document.getElementById('text').value.trim();
+    const saveBtn = document.getElementById('saveBtn');
+    saveBtn.disabled = !(title && text);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('title').addEventListener('input', updateSaveButtonState);
+    document.getElementById('text').addEventListener('input', updateSaveButtonState);
+    updateSaveButtonState(); 
+
+    // Sliding effect for expiration options
+    const options = document.getElementById('options');
+    const slider = options.querySelector('.slider');
+    const labels = options.querySelectorAll('label');
+    const radios = options.querySelectorAll('input[type="radio"]');
+
+    function moveSlider() {
+        const checked = options.querySelector('input[type="radio"]:checked');
+        const label = options.querySelector(`label[for="${checked.id}"]`);
+        if (label) {
+            const labelRect = label.getBoundingClientRect();
+            const optionsRect = options.getBoundingClientRect();
+            slider.style.left = (label.offsetLeft) + "px";
+            slider.style.width = label.offsetWidth + "px";
+        }
+    }
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', moveSlider);
+    });
+
+    // Initial position
+    moveSlider();
+
+    // If window resizes, keep slider aligned
+    window.addEventListener('resize', moveSlider);
+});

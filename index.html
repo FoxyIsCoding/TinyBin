@@ -11,24 +11,29 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="TinyBin" />
-    <meta property="og:title" content="PasteFox">
-    <meta property="og:description" content="Minimal, ad-free pastebin – support the dev on Ko-fi!">
+    <meta property="og:title" content="TinyBin – Minimal, ad-free " />
+    <meta property="og:description" content="Minimal, ad-free pastebin alternative!">
     <meta property="og:image" content="/some-preview-image.png">
     <meta property="og:url" content="https://tinybin.xyz">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="TinyBin">
     <meta property="og:locale" content="en_US">
     <meta property="og:locale:alternate" content="en_GB">
-
     <title>TinyBin</title>
     <script defer type="module" src="./src/frontend/index.js"></script>
     <link rel="stylesheet" href="./src/frontend/style.css">
+    <script src="https://kit.fontawesome.com/231816e55b.js" crossorigin="anonymous"></script>
+    <style>
+      body {
+        font-family: 'Bricolage Grotesque', sans-serif;
+      }
+    </style>
   </head>
   <body>
     <h1>TinyBin</h1>
     <main>
       <div class="buttons">
-        <button class="button-46" role="button" onclick="window.location.href='/new'">NEW</button>
+        <button class="button-46" role="button" onclick="window.location.href='/new'"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp; New paste</button>
       </div>
     </main>
     <!-- Ko-fi Support Box Start -->
@@ -38,7 +43,6 @@
         <div class="kofi-title">TinyBin</div>
         <div class="kofi-desc">
           is a project I develop in my free time and want to keep this project ad-free and open source.<br>
-          <span style="opacity:0.8;">I'm 15 years old and any kind of support would mean a lot to me.</span><br>
           <span class="kofi-cta"><b>Support me on Ko-fi</b> ☕</span>
         </div>
       </div>

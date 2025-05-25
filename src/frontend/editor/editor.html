@@ -6,25 +6,38 @@
     <title>Editor</title>
     <link rel="stylesheet" href="style.css">
     <script type="module" src="./editor.js"></script>
+    <script src="https://kit.fontawesome.com/231816e55b.js" crossorigin="anonymous"></script>
+    <style>
+
+        hr.solid {
+            border-top: 0.5px solid #0a0a0a3a;
+        }   
+    </style>
 </head>
 <body>
-    <h1>Editor</h1>
-    <main>
-        <div class="editor">
-            <input id="title" type="text" placeholder="Title" /><br>
-            <textarea id="text" rows="10" cols="30" placeholder="Note text"></textarea>
-        </div>
+    <br><br>
+    <div class="editor">
+        <input id="title" type="text" placeholder="Title" />
+        <textarea id="text" rows="10" cols="30" placeholder="Note text"></textarea>
+    </div>
+    <br><br>
+    <section class="editor-options">
+        <h3>Expiration:</h3>
         <div id="options">
-            <select id="expireDate">
-                <option value="1d">1 day</option>
-                <option value="1w">1 week</option>
-                <option value="1m">1 month</option>
-            </select>
+            <div class="slider"></div>
+            <input type="radio" name="expire" id="1h" value="1h">
+            <label for="1h">1h</label>
+            <input checked type="radio" name="expire" id="1d" value="1d">
+            <label for="1d">1d</label>
+            <input type="radio" name="expire" id="7d" value="1w">
+            <label for="7d">7d</label>
+            <input type="radio" name="expire" id="1m" value="1m">
+            <label for="1m">1m</label>
         </div>
         <div class="buttons">
-            <button class="button-46" role="button" id="saveBtn">SAVE</button>
+            <button class="button-46" role="button" id="saveBtn"><i class="fa-solid fa-cloud-arrow-up"></i> &nbsp;&nbsp;<strong>Save</strong></button>
         </div>
-    </main>
+    </section>
 
     <script type="module">
         import { postNote } from './editor.js';
