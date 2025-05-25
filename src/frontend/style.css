@@ -151,3 +151,11 @@ input:focus, textarea:focus {
   flex-direction: column;
   gap: 2em;
 }
+
+#options {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 20px;
+  border: ;
+}
