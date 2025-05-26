@@ -30,6 +30,7 @@ RUN pnpm run build
 FROM node:20-slim
 WORKDIR /app
 COPY --from=backend-builder /app/backend/dist ./backend/dist
+COPY --from=backend-builder /app/backend/drizzle ./backend/drizzle
 COPY --from=backend-builder /app/backend/package.json ./backend/
 COPY --from=backend-builder /app/backend/pnpm-lock.yaml ./backend/
 WORKDIR /app/backend

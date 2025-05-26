@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import path from 'path';
-import { getNoteByUrl } from '../queries/notes';
-import { makeResponse } from '../modules/Response';
+import { getNoteByUrl } from '../queries/notes.js';
+import { makeResponse } from '../modules/Response.js';
 
 const router = Router();
 const __dirname = process.cwd();

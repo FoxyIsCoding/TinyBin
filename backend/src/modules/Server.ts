@@ -4,8 +4,8 @@ Hi 👋 this is the file that exports an instance of the server and where we do 
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { Routes } from "./Routes"
-import { config } from '../config';
+import { Routes } from "./Routes.js"
+import { config } from '../config.js';
 
 const app = express();
 

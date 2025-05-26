@@ -1,7 +1,7 @@
 import { Express } from 'express';
-import healthRoutes from './health';
-import notesRoutes from './notes';
-import pagesRoutes from './pages';
+import healthRoutes from './health.js';
+import notesRoutes from './notes.js';
+import pagesRoutes from './pages.js';
 
 export function setupRoutes(app: Express) {
     // Health check route
