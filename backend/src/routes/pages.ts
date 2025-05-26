@@ -9,11 +9,12 @@ const __dirname = process.cwd();
 //TODO: No serving HTML files on backend. Thats bad... Your frontend will be in svelte and you integrate into the backend with it.
 
 // View note page
-router.get('/paste/:url', async (req: Request, res: Response) => {
+router.get('/paste/:url', async (req: Request, res: Response): Promise<void> => {
     try {
         const note = await getNoteByUrl(req.params.url);
         if (!note) {
-            return res.status(404).send(makeResponse(false, null, 'Note not found'));
+            res.status(404).send(makeResponse(false, null, 'Note not found'));
+            return;
         }
         res.send(makeResponse(true, note, 'Note retrieved successfully'));
     } catch (error: any) {
@@ -22,11 +23,12 @@ router.get('/paste/:url', async (req: Request, res: Response) => {
 });
 
 // Share note page
-router.get('/share/:url', async (req: Request, res: Response) => {
+router.get('/share/:url', async (req: Request, res: Response): Promise<void> => {
     try {
         const note = await getNoteByUrl(req.params.url);
         if (!note) {
-            return res.status(404).send(makeResponse(false, null, 'Note not found'));
+            res.status(404).send(makeResponse(false, null, 'Note not found'));
+            return;
         }
         res.send(makeResponse(true, note, 'Note retrieved successfully'));
     } catch (error: any) {
@@ -35,7 +37,7 @@ router.get('/share/:url', async (req: Request, res: Response) => {
 });
 
 // Editor page
-router.get('/new', (req: Request, res: Response) => {
+router.get('/new', (req: Request, res: Response): void => {
     res.send(makeResponse(true, null, 'New note page'));
 });
 

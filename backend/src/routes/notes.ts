@@ -5,11 +5,12 @@ import { makeResponse } from '../modules/Response';
 const router = Router();
 
 // Get note by URL
-router.get('/:url', async (req: Request, res: Response) => {
+router.get('/:url', async (req: Request, res: Response): Promise<void> => {
     try {
         const note = await getNoteByUrl(req.params.url);
         if (!note) {
-            return res.status(404).send(makeResponse(false, null, 'Note not found'));
+            res.status(404).send(makeResponse(false, null, 'Note not found'));
+            return;
         }
         res.send(makeResponse(true, note, 'Note retrieved successfully'));
     } catch (error: any) {
@@ -18,7 +19,7 @@ router.get('/:url', async (req: Request, res: Response) => {
 });
 
 // Create new note
-router.post('/add', async (req: Request, res: Response) => {
+router.post('/add', async (req: Request, res: Response): Promise<void> => {
     try {
         const { title, text, expiresAt } = req.body;
         const noteId = await createNote(title, text, expiresAt ? new Date(expiresAt) : null);
