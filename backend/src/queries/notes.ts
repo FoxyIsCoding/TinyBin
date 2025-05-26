@@ -29,10 +29,10 @@ export async function getNoteByUrl(url: string) {
     return result[0];
 }
 
-export async function removeExpiredNotes() {
+export async function removeExpiredNotes(): Promise<number> {
     const result = await db.delete(notes).where(
         and(isNotNull(notes.expiresAt), lt(notes.expiresAt, new Date()))
     );
-    return result;
+    return result.rowCount ?? 0;
 }
 
