@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { createNote, getNoteById, getNoteByUrl } from '../queries/notes.js';
-import { makeResponse } from '../modules/Response.js';
+import { createNote, getNoteById, getNoteByUrl } from '../queries/notes';
+import { makeResponse } from '../modules/Response';
 
 const router = Router();
 

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { makeResponse } from '../modules/Response.js';
+import { makeResponse } from '../modules/Response';
 
 const router = Router();
 

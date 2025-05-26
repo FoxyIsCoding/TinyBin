@@ -1,4 +1,4 @@
-import { removeExpiredNotes } from '../queries/notes.js';
+import { removeExpiredNotes } from '../queries/notes';
 
 // looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooop and repeat :33
 export async function loop() {

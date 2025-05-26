@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { config } from './config.js';
+import { config } from './config';
 import { setupRoutes } from './routes/index';
 import { setupDatabase } from './database';
 

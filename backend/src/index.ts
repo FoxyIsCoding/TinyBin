@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import notesRoutes from './routes/notes.js';
-import healthRoutes from './routes/health.js';
-import { removeExpiredNotes } from './queries/notes.js';
+import notesRoutes from './routes/notes';
+import healthRoutes from './routes/health';
+import { removeExpiredNotes } from './queries/notes';
 
 const app = express();
 const port = process.env.PORT || 3000;
