@@ -29,10 +29,26 @@ RUN pnpm run build
 # Final stage
 FROM node:20-slim
 WORKDIR /app
+
+# Copy frontend build
+COPY --from=0 /app/frontend/dist ./frontend/dist
+COPY --from=0 /app/frontend/package.json ./frontend/
+COPY --from=0 /app/frontend/pnpm-lock.yaml ./frontend/
+
+# Copy backend build
 COPY --from=backend-builder /app/backend/dist ./backend/dist
 COPY --from=backend-builder /app/backend/drizzle ./backend/drizzle
 COPY --from=backend-builder /app/backend/package.json ./backend/
 COPY --from=backend-builder /app/backend/pnpm-lock.yaml ./backend/
+
+# Copy start script
+COPY backend/start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+# Install dependencies
+WORKDIR /app/frontend
+RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
+
 WORKDIR /app/backend
 RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
 
@@ -45,6 +61,5 @@ ENV VITE_PORT=5173
 EXPOSE 3000
 EXPOSE 5173
 
-
-# Start the backend
-CMD ["node", "dist/index.js"]
+# Start both services
+CMD ["/app/start.sh"]

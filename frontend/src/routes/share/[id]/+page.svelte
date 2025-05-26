@@ -14,37 +14,43 @@
     try {
       const response = await fetch(`/api/notes/${$page.params.id}`);
       if (response.ok) {
-        note = await response.json();
-        if (note && note.url) {
-          shareLink = `${window.location.origin}/view/${note.url}`;
-          
-          // Initialize QR Code
-          qrCode = new QRCodeStyling({
-            width: 150,
-            height: 150,
-            data: shareLink,
-            dotsOptions: {
-              color: "#ffffff",
-              type: "rounded"
-            },
-            backgroundOptions: {
-              color: "#121212"
-            },
-            cornersSquareOptions: {
-              type: "extra-rounded"
-            }
-          });
+        const data = await response.json();
+        if (data.success && data.data) {
+          note = data.data;
+          if (note && note.url) {
+            shareLink = `${window.location.origin}/view/${note.url}`;
+            
+            // Initialize QR Code
+            qrCode = new QRCodeStyling({
+              width: 150,
+              height: 150,
+              data: shareLink,
+              dotsOptions: {
+                color: "#ffffff",
+                type: "rounded"
+              },
+              backgroundOptions: {
+                color: "#121212"
+              },
+              cornersSquareOptions: {
+                type: "extra-rounded"
+              }
+            });
 
-          // Wait for the canvas to be available
-          setTimeout(() => {
-            const canvas = document.getElementById('qr-canvas');
-            if (canvas) {
-              qrCode.append(canvas);
-            }
-          }, 0);
+            // Wait for the canvas to be available
+            setTimeout(() => {
+              const canvas = document.getElementById('qr-canvas');
+              if (canvas) {
+                qrCode.append(canvas);
+              }
+            }, 0);
+          }
+        } else {
+          error = 'Invalid response format';
         }
       } else {
-        error = 'Note not found or has expired';
+        const errorData = await response.json();
+        error = errorData.message || 'Note not found or has expired';
       }
     } catch (err) {
       error = 'Error loading note';

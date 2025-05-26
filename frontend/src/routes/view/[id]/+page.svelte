@@ -4,7 +4,13 @@
   import '../../../app.css';
   import { marked } from 'marked';
 
-  let note: { title: string; text: string; expiresAt: string; createdAt: string } | null = null;
+  let note: { 
+    title: string; 
+    text: string; 
+    expires_at: string; 
+    created_at: string;
+    url: string;
+  } | null = null;
   let loading = true;
   let error = '';
   let renderedContent = '';
@@ -15,15 +21,23 @@
     try {
       const response = await fetch(`/api/notes/${$page.params.id}`);
       if (response.ok) {
-        note = await response.json();
-        if (note) {
-          renderedContent = marked.parse(note.text, { async: false }) as string;
-          updateTimeLeft();
-          // Update time left every minute
-          setInterval(updateTimeLeft, 60000);
+        const data = await response.json();
+        console.log('API Response:', data);
+        if (data.success && data.data) {
+          note = data.data;
+          console.log('Note data:', note);
+          if (note) {
+            renderedContent = marked.parse(note.text, { async: false }) as string;
+            updateTimeLeft();
+            // Update time left every second
+            setInterval(updateTimeLeft, 1000);
+          }
+        } else {
+          error = 'Invalid response format';
         }
       } else {
-        error = 'Note not found or has expired';
+        const errorData = await response.json();
+        error = errorData.message || 'Note not found or has expired';
       }
     } catch (err) {
       error = 'Error loading note';
@@ -33,25 +47,75 @@
     }
   });
 
+  function formatDate(dateString: string): string {
+    console.log('Formatting date:', dateString);
+    try {
+      const date = new Date(dateString);
+      console.log('Parsed date:', date);
+      if (isNaN(date.getTime())) {
+        console.log('Invalid date detected');
+        return 'Invalid Date';
+      }
+      const formatted = date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      console.log('Formatted date:', formatted);
+      return formatted;
+    } catch (err) {
+      console.error('Error formatting date:', err);
+      return 'Invalid Date';
+    }
+  }
+
   function updateTimeLeft() {
-    if (!note) return;
-    const now = new Date();
-    const expires = new Date(note.expiresAt);
-    const diff = expires.getTime() - now.getTime();
-    
-    if (diff <= 0) {
-      timeLeft = 'Expired';
+    if (!note || !note.expires_at) {
+      timeLeft = 'No expiration';
       return;
     }
 
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
-    if (hours > 0) {
-      timeLeft = `Expires in ${hours}h ${minutes}m`;
-    } else {
-      timeLeft = `Expires in ${minutes}m`;
+    try {
+      const now = new Date();
+      const expires = new Date(note.expires_at);
+      
+      if (isNaN(expires.getTime())) {
+        timeLeft = 'Invalid expiration date';
+        return;
+      }
+
+      const diff = expires.getTime() - now.getTime();
+      
+      if (diff <= 0) {
+        timeLeft = 'Expired';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      if (days > 0) {
+        timeLeft = `Expires in ${days}d ${hours}h`;
+      } else if (hours > 0) {
+        timeLeft = `Expires in ${hours}h ${minutes}m`;
+      } else if (minutes > 0) {
+        timeLeft = `Expires in ${minutes}m ${seconds}s`;
+      } else {
+        timeLeft = `Expires in ${seconds}s`;
+      }
+    } catch (err) {
+      console.error('Error calculating time left:', err);
+      timeLeft = 'Error calculating expiration';
     }
+  }
+
+  function getLineCount(text: string): number {
+    return text.split('\n').length;
   }
 
   async function copyUrl() {
@@ -91,21 +155,28 @@
           <div class="meta-info">
             <div class="meta-item">
               <i class="fa-regular fa-calendar"></i>
-              Created: {new Date(note.createdAt).toLocaleString()}
+              Created: {formatDate(note.created_at)}
             </div>
             <div class="meta-item">
               <i class="fa-regular fa-clock"></i>
               {timeLeft}
             </div>
+            <div class="meta-item">
+              <i class="fa-solid fa-link"></i>
+              <button class="link-button" on:click={copyUrl}>
+                {#if copySuccess}
+                  <i class="fa-solid fa-check"></i> Copied!
+                {:else}
+                  Copy URL
+                {/if}
+              </button>
+            </div>
+            <div class="meta-item">
+              <i class="fa-solid fa-code"></i>
+              {getLineCount(note.text)} lines
+            </div>
           </div>
         </div>
-        <button class="button-46" on:click={copyUrl}>
-          {#if copySuccess}
-            <i class="fa-solid fa-check"></i>&nbsp;&nbsp;COPIED!
-          {:else}
-            <i class="fa-solid fa-copy"></i>&nbsp;&nbsp;COPY URL
-          {/if}
-        </button>
       </div>
       <div class="content">{@html renderedContent}</div>
     </div>
@@ -114,7 +185,7 @@
 
 <style>
   .view {
-    max-width: 800px;
+    max-width: 100%;
     margin: 0 auto;
     padding: 2rem;
   }
@@ -134,6 +205,9 @@
 
   .note {
     padding: 2rem;
+    height: calc(100vh - 4rem);
+    display: flex;
+    flex-direction: column;
   }
 
   .note-header {
@@ -152,6 +226,7 @@
 
   .meta-info {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
     color: var(--text-secondary);
     font-size: 0.9rem;
@@ -167,12 +242,51 @@
     color: var(--primary-color);
   }
 
+  .link-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .link-button:hover {
+    color: var(--primary-color);
+  }
+
   .content {
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 1.5rem;
     color: white;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.3);
+  }
+
+  .content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+  }
+
+  .content::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .content::-webkit-scrollbar-thumb:hover {
+    background: #4a90e2;
   }
 
   .content :global(p) {
@@ -186,6 +300,27 @@
     border-radius: 8px;
     overflow-x: auto;
     margin: 1rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.2);
+  }
+
+  .content :global(pre::-webkit-scrollbar) {
+    height: 8px;
+  }
+
+  .content :global(pre::-webkit-scrollbar-track) {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  .content :global(pre::-webkit-scrollbar-thumb) {
+    background: var(--primary-color);
+    border-radius: 4px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+  }
+
+  .content :global(pre::-webkit-scrollbar-thumb:hover) {
+    background: #4a90e2;
   }
 
   .content :global(code) {
@@ -223,38 +358,6 @@
     font-size: 1.2rem;
   }
 
-  .button-46 {
-    align-items: center;
-    background-color: rgba(26, 26, 26, 0.26);
-    border: 1px solid #2c2c2c;
-    border-radius: 16px;
-    box-sizing: border-box;
-    color: #ffffff;
-    cursor: pointer;
-    display: flex;
-    font-family: var(--font-family);
-    font-size: 18px;
-    justify-content: center;
-    line-height: 28px;
-    padding: 14px 22px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-  }
-
-  .button-46:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
-  }
-
-  .button-46:active {
-    transform: translateY(0);
-  }
-
   @media (max-width: 768px) {
     .view {
       padding: 1rem;
@@ -262,15 +365,12 @@
 
     .note {
       padding: 1.5rem;
+      height: calc(100vh - 2rem);
     }
 
     .meta-info {
       flex-direction: column;
       gap: 0.5rem;
-    }
-
-    .button-46 {
-      width: 100%;
     }
   }
 </style> 

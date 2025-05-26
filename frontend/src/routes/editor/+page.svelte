@@ -57,14 +57,19 @@
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save note');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to save note');
       }
 
       const data = await response.json();
-      window.location.href = `/share/${data.url}`;
+      if (data.success && data.data && data.data.url) {
+        window.location.href = `/share/${data.data.url}`;
+      } else {
+        throw new Error('Invalid response format');
+      }
     } catch (err) {
       console.error('Error:', err);
-      error = 'Error saving note. Please try again.';
+      error = err instanceof Error ? err.message : 'Error saving note. Please try again.';
     } finally {
       isSaving = false;
     }

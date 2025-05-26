@@ -2,14 +2,18 @@ import dotenv from "dotenv";
 dotenv.config()
 
 interface Config {
-    database_url: string,
-    port: number
+    port: number;
+    database_url: string;
+    node_env: string;
 }
 
-export const config: Config = {
-    database_url: getEnvVariable("DATABASE_URL"),
-    port: getEnvVariable("PORT", 8080)
-}
+const config: Config = {
+    port: parseInt(process.env.PORT || '3000'),
+    database_url: process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/tinybin',
+    node_env: process.env.NODE_ENV || 'development'
+};
+
+export { config };
 
 /*
 import { drizzle } from "drizzle-orm/node-postgres"

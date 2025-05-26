@@ -26,6 +26,7 @@ services:
       NODE_ENV: production
     ports:
       - "3000:3000"
+      - "5173:5173"
     networks:
       - tinybin-network
     depends_on:

@@ -14,6 +14,7 @@ router.get('/:url', async (req: Request, res: Response): Promise<void> => {
         }
         res.send(makeResponse(true, note, 'Note retrieved successfully'));
     } catch (error: any) {
+        console.error('Error retrieving note:', error);
         res.status(500).send(makeResponse(false, null, 'Error retrieving note', error?.message || 'Unknown error'));
     }
 });
@@ -22,15 +23,20 @@ router.get('/:url', async (req: Request, res: Response): Promise<void> => {
 router.post('/add', async (req: Request, res: Response): Promise<void> => {
     try {
         const { title, text, expiresAt } = req.body;
+        if (!title || !text) {
+            res.status(400).send(makeResponse(false, null, 'Title and text are required'));
+            return;
+        }
         const noteId = await createNote(title, text, expiresAt ? new Date(expiresAt) : null);
         const note = await getNoteById(noteId);
         res.status(201).send(makeResponse(true, note, 'Note created successfully'));
     } catch (error: any) {
+        console.error('Error creating note:', error);
         res.status(500).send(makeResponse(false, null, 'Error creating note', error?.message || 'Unknown error'));
     }
 });
 
 export default {
-    prefix: '/notes',
+    prefix: '/api/notes',
     router
 }; 

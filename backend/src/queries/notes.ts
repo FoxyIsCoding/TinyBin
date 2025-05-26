@@ -8,19 +8,19 @@ import { generateId } from '../utils/id.js';
 import { eq, lt, isNotNull, and } from 'drizzle-orm';
 
 // Export exports it where you can impot via {create_note}
-export async function createNote(title: string, text: string, expiresAt: Date | null = null): Promise<string> {
+export async function createNote(title: string, text: string, expiresAt: Date | null = null): Promise<number> {
     const url = await generateId();
     const inserted = await db.insert(notes).values({
         title,
         text,
         url,
-        expiresAt
+        expires_at: expiresAt
     }).returning();
-    return inserted[0].id.toString();
+    return inserted[0].id;
 }
 
-export async function getNoteById(id: string) {
-    const result = await db.select().from(notes).where(eq(notes.id, parseInt(id)));
+export async function getNoteById(id: number) {
+    const result = await db.select().from(notes).where(eq(notes.id, id));
     return result[0];
 }
 
@@ -31,7 +31,7 @@ export async function getNoteByUrl(url: string) {
 
 export async function removeExpiredNotes(): Promise<number> {
     const result = await db.delete(notes).where(
-        and(isNotNull(notes.expiresAt), lt(notes.expiresAt, new Date()))
+        and(isNotNull(notes.expires_at), lt(notes.expires_at, new Date()))
     );
     return result.rowCount ?? 0;
 }
