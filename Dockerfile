@@ -28,6 +28,7 @@ RUN pnpm run build
 # Build backend
 WORKDIR /app/backend
 RUN pnpm install
+RUN pnpm add -D @types/express @types/cors @types/pg
 RUN pnpm run build
 
 # Set environment variables
