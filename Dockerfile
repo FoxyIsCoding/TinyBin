@@ -8,22 +8,27 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install root dependencies
+RUN pnpm install
 
 # Copy source code
 COPY . .
 
 # Build frontend
 WORKDIR /app/frontend
-RUN npm install
-RUN npm run build
+RUN pnpm install
+RUN pnpm run build
 
 # Build backend
 WORKDIR /app/backend
-RUN npm install
-RUN npm run build
+RUN pnpm install
+RUN pnpm run build
 
 # Set environment variables
 ENV NODE_ENV=production
