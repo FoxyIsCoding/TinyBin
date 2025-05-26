@@ -18,12 +18,22 @@ RUN pnpm install --frozen-lockfile
 COPY frontend ./
 RUN pnpm run build
 
-# Backend build
+# Build backend
+FROM node:20-slim AS backend-builder
 WORKDIR /app/backend
 COPY backend/package.json backend/pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
 COPY backend ./
 RUN pnpm run build
+
+# Final stage
+FROM node:20-slim
+WORKDIR /app
+COPY --from=backend-builder /app/backend/dist ./backend/dist
+COPY --from=backend-builder /app/backend/package.json ./backend/
+COPY --from=backend-builder /app/backend/pnpm-lock.yaml ./backend/
+WORKDIR /app/backend
+RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
 
 # Set environment variables
 ENV NODE_ENV=production
@@ -32,5 +42,5 @@ ENV PORT=3000
 # Expose port
 EXPOSE 3000
 
-# Start the application
-CMD ["node", "backend/dist/index.js"]
+# Start the backend
+CMD ["node", "dist/index.js"]
