@@ -1,6 +1,32 @@
 <script>
-  import '../app.css';
-  import { page } from '$app/stores';
+  import "../app.css";
+  import { onMount } from "svelte";
+
+  let theme = "dark";
+  let isMenuOpen = false;
+
+  onMount(() => {
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      theme = savedTheme;
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+  });
+
+  function toggleTheme() {
+    theme = theme === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }
+
+  function toggleMenu() {
+    isMenuOpen = !isMenuOpen;
+  }
+
+  function closeMenu() {
+    isMenuOpen = false;
+  }
 </script>
 
 <svelte:head>
@@ -10,27 +36,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </svelte:head>
 
-<div class="app" class:fade-gradient={$page.url.pathname !== '/'}>
-  <nav class="glass-card">
-    <a href="/" class="logo">
-      <i class="fas fa-paste"></i>
-      <span>PasteFox</span>
-    </a>
-    <div class="nav-links">
-      <a href="/" class="nav-link">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
+<div class="app">
+  <nav>
+    <div class="nav-content">
+      <a href="/" class="logo" on:click={closeMenu}>
+        <i class="fas fa-code"></i>
+        TinyBin
       </a>
-      <a href="/editor" class="nav-link">
-        <i class="fas fa-plus"></i>
-        <span>New Paste</span>
-      </a>
-      <a href="/about" class="nav-link">
-        <i class="fas fa-info-circle"></i>
-        <span>About</span>
-      </a>
+      <button class="menu-toggle" on:click={toggleMenu} aria-label="Toggle menu">
+        <i class="fas fa-{isMenuOpen ? 'times' : 'bars'}"></i>
+      </button>
+      <div class="links" class:open={isMenuOpen}>
+        <a href="/" class="nav-link" on:click={closeMenu}>Home</a>
+        <a href="/editor" class="nav-link" on:click={closeMenu}>New Paste</a>
+        <a href="/about" class="nav-link" on:click={closeMenu}>About</a>
+      </div>
     </div>
   </nav>
+
+  <button class="theme-switch" on:click={toggleTheme} aria-label="Toggle theme">
+    <i class="fas fa-{theme === 'dark' ? 'sun' : 'moon'}"></i>
+  </button>
 
   <main>
     <slot />
@@ -39,111 +65,110 @@
 
 <style>
   .app {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
 
   nav {
-    padding: 1.5rem 2rem;
-    margin-bottom: 2rem;
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 1rem;
-    z-index: 100;
   }
 
   .logo {
     font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: all 0.3s ease;
+    font-weight: 600;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    z-index: 101;
   }
 
   .logo i {
-    font-size: 1.3rem;
+    color: var(--primary-color);
   }
 
-  .logo:hover {
-    color: var(--primary-hover);
-    transform: translateY(-1px);
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 101;
   }
 
-  .nav-links {
+  .links {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
+    align-items: center;
   }
 
   .nav-link {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-size: 1rem;
-    padding: 0.7rem 1.2rem;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--background-input);
-    border: 1px solid var(--border-color);
-  }
-
-  .nav-link i {
-    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: color 0.3s ease;
   }
 
   .nav-link:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
-  }
-
-  .nav-link:active {
-    transform: translateY(0);
+    color: var(--text-primary);
   }
 
   main {
     flex: 1;
-    padding: 1rem 0;
-    width: 100%;
+    padding: 2rem 0;
   }
 
   @media (max-width: 768px) {
-    nav {
-      padding: 1rem;
-      flex-direction: column;
-      gap: 1rem;
+    .menu-toggle {
+      display: block;
     }
 
-    .nav-links {
+    .nav-content {
+      padding: 0 1rem;
+    }
+
+    .links {
+      position: fixed;
+      top: 0;
+      right: -100%;
       width: 100%;
+      height: 100vh;
+      background: var(--background-secondary);
+      flex-direction: column;
       justify-content: center;
+      gap: 2rem;
+      transition: right 0.3s ease;
+      z-index: 100;
     }
 
-    .nav-link span {
-      display: none;
+    .links.open {
+      right: 0;
     }
 
     .nav-link {
-      padding: 0.7rem;
+      font-size: 1.25rem;
+      padding: 0.5rem 1rem;
     }
 
-    .nav-link i {
-      font-size: 1.2rem;
+    .theme-switch {
+      top: 1rem;
+      right: 4rem;
     }
-  }
-
-  .fade-gradient {
-    background-image: none !important;
   }
 </style> 
