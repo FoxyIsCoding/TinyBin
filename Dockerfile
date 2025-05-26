@@ -39,9 +39,12 @@ RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV VITE_PORT=5173
 
-# Expose port
+# Expose ports
 EXPOSE 3000
+EXPOSE 5173
+
 
 # Start the backend
 CMD ["node", "dist/index.js"]
