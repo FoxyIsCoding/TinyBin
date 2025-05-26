@@ -54,7 +54,7 @@ ENV DB_NAME=tinybin
 ENV DATABASE_URL=postgres://postgres:postgres@db:5432/tinybin
 
 # Copy frontend build
-COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
+COPY --from=frontend-builder /app/frontend/build ./frontend/build
 COPY --from=frontend-builder /app/frontend/package.json ./frontend/
 COPY --from=frontend-builder /app/frontend/pnpm-lock.yaml ./frontend/
 
