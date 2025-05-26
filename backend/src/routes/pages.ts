@@ -6,7 +6,6 @@ import { makeResponse } from '../modules/Response.js';
 const router = Router();
 const __dirname = process.cwd();
 
-//TODO: No serving HTML files on backend. Thats bad... Your frontend will be in svelte and you integrate into the backend with it.
 
 // View note page
 router.get('/paste/:url', async (req: Request, res: Response): Promise<void> => {
