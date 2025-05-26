@@ -12,18 +12,20 @@ router.get('/:url', async (req: Request, res: Response) => {
             return res.status(404).send(makeResponse(false, null, 'Note not found'));
         }
         res.send(makeResponse(true, note, 'Note retrieved successfully'));
-    } catch (error) {
-        res.status(500).send(makeResponse(false, null, 'Error retrieving note', error.message));
+    } catch (error: any) {
+        res.status(500).send(makeResponse(false, null, 'Error retrieving note', error?.message || 'Unknown error'));
     }
 });
 
 // Create new note
 router.post('/add', async (req: Request, res: Response) => {
     try {
-        const note = await createNote(req.body);
+        const { title, text, expiresAt } = req.body;
+        const noteId = await createNote(title, text, expiresAt ? new Date(expiresAt) : null);
+        const note = await getNoteById(noteId);
         res.status(201).send(makeResponse(true, note, 'Note created successfully'));
-    } catch (error) {
-        res.status(500).send(makeResponse(false, null, 'Error creating note', error.message));
+    } catch (error: any) {
+        res.status(500).send(makeResponse(false, null, 'Error creating note', error?.message || 'Unknown error'));
     }
 });
 

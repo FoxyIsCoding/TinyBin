@@ -2,17 +2,14 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ES2020",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist",
     "rootDir": "src",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "types": ["node", "express", "cors", "pg"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

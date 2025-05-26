@@ -16,8 +16,8 @@ router.get('/paste/:url', async (req: Request, res: Response) => {
             return res.status(404).send(makeResponse(false, null, 'Note not found'));
         }
         res.send(makeResponse(true, note, 'Note retrieved successfully'));
-    } catch (error) {
-        res.status(500).send(makeResponse(false, null, 'Error retrieving note', error.message));
+    } catch (error: any) {
+        res.status(500).send(makeResponse(false, null, 'Error retrieving note', error?.message || 'Unknown error'));
     }
 });
 
@@ -29,8 +29,8 @@ router.get('/share/:url', async (req: Request, res: Response) => {
             return res.status(404).send(makeResponse(false, null, 'Note not found'));
         }
         res.send(makeResponse(true, note, 'Note retrieved successfully'));
-    } catch (error) {
-        res.status(500).send(makeResponse(false, null, 'Error retrieving note', error.message));
+    } catch (error: any) {
+        res.status(500).send(makeResponse(false, null, 'Error retrieving note', error?.message || 'Unknown error'));
     }
 });
 
