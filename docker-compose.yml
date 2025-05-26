@@ -1,42 +1,50 @@
 version: '3.8'
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4173:4173"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=tinybin
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/tinybin
+
   db:
     image: postgres:15-alpine
-    restart: always
+    ports:
+      - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: tinybin
-    networks:
-      - tinybin-network
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tinybin
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  tinybin:
-    image: ghcr.io/foxyiscoding/tinybin:latest
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/tinybin
-      WEB_PORT: 3000
-      NODE_ENV: production
-    ports:
-      - "3000:3000"
-      - "5173:5173"
-    networks:
-      - tinybin-network
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: always
-
 volumes:
-  db-data:
-    name: tinybin-db-data
+  postgres_data:
 
 networks:
   tinybin-network:
