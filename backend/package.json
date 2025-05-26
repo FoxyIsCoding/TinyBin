@@ -17,8 +17,6 @@
   "license": "ISC",
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
-    "@types/cors": "^2.8.18",
-    "@types/express": "^5.0.2",
     "@types/pg": "^8.15.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
@@ -30,6 +28,8 @@
     "tsx": "^4.19.4"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
     "@types/node": "^22.15.21",
     "typescript": "^5.8.3"
   }
