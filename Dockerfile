@@ -41,7 +41,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Install pnpm and netcat
-RUN apk add --no-cache netcat-traditional
+RUN apk add --no-cache netcat-openbsd
 
 # Set environment variables
 ENV PORT=3000
