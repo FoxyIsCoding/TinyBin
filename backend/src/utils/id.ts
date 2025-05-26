@@ -1,4 +1,4 @@
-import crypto from "node:crypto"
+import { customAlphabet } from 'nanoid';
 // NO DB CALLS OUTSIDE OF QUERIES FUNCTIONS!!!
 
 // Tf does this file do?
@@ -13,6 +13,8 @@ import crypto from "node:crypto"
 // Is this for note ID?
 // 8 is common enough leave as is imo 👍
 
-export async function generateNoteId() {
-    return crypto.getRandomValues(new Uint32Array(1))[0].toString(8); // Returns smth like: 47525620
+const nanoid = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 10);
+
+export async function generateId(): Promise<string> {
+    return nanoid();
 }
