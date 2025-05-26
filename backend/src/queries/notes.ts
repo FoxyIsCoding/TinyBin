@@ -2,9 +2,9 @@
 Follow a format where you have "queries" functions which interact with the database. No route should ever do DB specific logic on it. It should only be calling the pre made functions
 */
 
-import { db } from '../database';
-import { notes } from '../db/schema';
-import { generateId } from '../utils/id';
+import { db } from '../database.js';
+import { notes } from '../db/schema.js';
+import { generateId } from '../utils/id.js';
 import { eq, lt, isNotNull, and } from 'drizzle-orm';
 
 // Export exports it where you can impot via {create_note}
