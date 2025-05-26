@@ -28,6 +28,8 @@ RUN pnpm run build
 # Build backend
 WORKDIR /app/backend
 RUN pnpm install
+# Fix TypeScript module resolution issues
+RUN sed -i 's/"moduleResolution": "NodeNext"/"moduleResolution": "Bundler"/g' tsconfig.json
 RUN pnpm run build
 
 # Set environment variables
