@@ -3,6 +3,11 @@ FROM node:20-slim
 # Set working directory
 WORKDIR /app
 
+# Install git and other build dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install dependencies
 COPY package*.json ./
 RUN npm install
@@ -28,4 +33,4 @@ ENV PORT=3000
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"]
+CMD ["node", "backend/dist/index.js"]
