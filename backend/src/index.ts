@@ -1,26 +1,28 @@
+import express from 'express';
+import cors from 'cors';
+import notesRoutes from './routes/notes.js';
+import healthRoutes from './routes/health.js';
 import { removeExpiredNotes } from './queries/notes.js';
-import { loop } from './db/utils';
-import { startWebServer } from './modules/Server';
 
+const app = express();
+const port = process.env.PORT || 3000;
 
-// Setup and load all components
-async function start() {
-  try {
-    console.log('⌚ | Starting application...');
-    await startupCheck();
-    console.log("🆕 | Starting web server");
-    await startWebServer();
-    console.log("🆕 | Starting note loop");
-    await loop();
-  } catch (error) {
-    console.error('Failed to start application:', error);
-    process.exit(1);
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use(notesRoutes.prefix, notesRoutes.router);
+app.use(healthRoutes.prefix, healthRoutes.router);
+
+// Cleanup expired notes every hour
+setInterval(async () => {
+  const removed = await removeExpiredNotes();
+  if (removed > 0) {
+    console.log(`🧹 | Removed ${removed} expired notes`);
   }
-}
+}, 60 * 60 * 1000);
 
-async function startupCheck() {
-  await removeExpiredNotes();
-  console.log("🧰 | Removed old expired notes");
-}
-
-start().catch(console.error);
+app.listen(port, () => {
+  console.log(`🚀 | Server running on port ${port}`);
+});

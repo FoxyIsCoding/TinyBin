@@ -1,14 +1,14 @@
-import config from './src/config.ts';
-
-
 import { defineConfig } from 'drizzle-kit';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default defineConfig({
-  out: './drizzle',
   schema: './src/db/schema.ts',
+  out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {
-    database_url: config.database_url
-  },
+    url: process.env.DATABASE_URL
+  }
 });
 // The db already ensures the type of that entry, no need to parse int
