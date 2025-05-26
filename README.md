@@ -71,16 +71,6 @@ No manual SQL needed!
 If you like this project, consider [supporting me on Ko-fi](https://ko-fi.com/foxyk)!  
 Your support keeps PasteFox ad-free and open source.
 
----
-
-## 🔑 Credit
-
-Huge thank you to [Error](https://github.com/Err0r430) for major help rewriting backend structure and migration to a more sophisticated stack. 
-Huge thank you to [Loudbook](https://github.com/Loudbooks) for design inspiration and Docker help.
-
----
-
-
 
 ---
 
@@ -90,7 +80,7 @@ MIT
 
 ---
 
----
+
 ## 🔑 Credits
 
 Huge thank you to [Loudbook](https://github.com/Loudbooks) for design inspiration and Docker help.
