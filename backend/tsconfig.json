@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist",
     "rootDir": "src",
-    "types": ["node", "express", "cors", "pg"]
+    "types": ["node", "express", "cors", "pg", "body-parser"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
