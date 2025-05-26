@@ -1,41 +1,43 @@
+version: '3.8'
+
 services:
   db:
-    image: mysql:8.4
+    image: postgres:15-alpine
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: pastefox
-      MYSQL_USER: pastefox
-      MYSQL_PASSWORD: pastefox
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tinybin
     networks:
-      - pastefox-network
+      - tinybin-network
     volumes:
-      - db-data:/var/lib/mysql
+      - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 5
 
-  pastefox:
-    image: ghcr.io/foxyiscoding/pastefox:latest
+  tinybin:
+    image: ghcr.io/foxyiscoding/tinybin:latest
     environment:
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_USER: pastefox
-      DB_PASSWORD: pastefox
-      DB_NAME: pastefox
+      DATABASE_URL: postgres://postgres:postgres@db:5432/tinybin
       WEB_PORT: 3000
+      NODE_ENV: production
     ports:
       - "3000:3000"
     networks:
-      - pastefox-network
+      - tinybin-network
     depends_on:
       db:
         condition: service_healthy
+    restart: always
 
 volumes:
   db-data:
+    name: tinybin-db-data
 
 networks:
-  pastefox-network:
+  tinybin-network:
+    name: tinybin-network
     driver: bridge

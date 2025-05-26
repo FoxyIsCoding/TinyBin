@@ -6,18 +6,29 @@
   "main": "src/main.js",
   "scripts": {
     "dev": "vite dev",
-    "start": "cd ./src && node main.js"
+    "build": "tsc",
+    "start": "npm run build && node dist/main.js"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "@types/pg": "^8.15.2",
+    "drizzle-kit": "^0.31.1",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
     "vite": "^6.3.5"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
+    "drizzle": "^1.4.0",
+    "drizzle-orm": "^0.43.1",
     "express": "^5.1.0",
     "fs": "^0.0.1-security",
     "mysql2": "^3.14.1",
+    "pg": "^8.16.0",
     "qr-code-styling": "^1.9.2"
   }
 }

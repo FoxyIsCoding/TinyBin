@@ -1,7 +1,31 @@
-FROM node:22
+FROM node:20-slim
+
+# Set working directory
 WORKDIR /app
+
+# Install dependencies
 COPY package*.json ./
 RUN npm install
+
+# Copy source code
 COPY . .
+
+# Build frontend
+WORKDIR /app/frontend
+RUN npm install
+RUN npm run build
+
+# Build backend
+WORKDIR /app/backend
+RUN npm install
+RUN npm run build
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# Expose port
 EXPOSE 3000
+
+# Start the application
 CMD ["npm", "start"]

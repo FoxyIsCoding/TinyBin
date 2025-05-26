@@ -38,10 +38,10 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v3
         with:
-          path: /tmp/.buildx-cache-pastefox
-          key: ${{ runner.os }}-pastefox-buildx-${{ github.sha }}
+          path: /tmp/.buildx-cache-tinybin
+          key: ${{ runner.os }}-tinybin-buildx-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-pastefox-buildx-
+            ${{ runner.os }}-tinybin-buildx-
 
       - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v3
@@ -52,13 +52,13 @@ jobs:
             COMMIT_HASH=${{ env.hash }}
           push: true
           platforms: linux/amd64,linux/arm64,linux/arm/v7
-          cache-from: type=local,src=/tmp/.buildx-cache-pastefox
-          cache-to: type=local,dest=/tmp/.buildx-cache-pastefox-new,mode=max
+          cache-from: type=local,src=/tmp/.buildx-cache-tinybin
+          cache-to: type=local,dest=/tmp/.buildx-cache-tinybin-new,mode=max
           tags: |
-            ghcr.io/foxyiscoding/pastefox:${{ env.tag }}
-            ghcr.io/foxyiscoding/pastefox:${{ env.hash }}
+            ghcr.io/foxyiscoding/tinybin:${{ env.tag }}
+            ghcr.io/foxyiscoding/tinybin:${{ env.hash }}
 
       - name: Move updated Docker cache
         run: |
-          rm -rf /tmp/.buildx-cache-pastefox
-          mv /tmp/.buildx-cache-pastefox-new /tmp/.buildx-cache-pastefox
+          rm -rf /tmp/.buildx-cache-tinybin
+          mv /tmp/.buildx-cache-tinybin-new /tmp/.buildx-cache-tinybin
