@@ -11,24 +11,18 @@ RUN apt-get update && apt-get install -y \
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
-
-# Install root dependencies
-RUN pnpm install
-
-# Copy source code
+# Copy full project
 COPY . .
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
 
 # Build frontend
 WORKDIR /app/frontend
-RUN pnpm install
 RUN pnpm run build
 
 # Build backend
 WORKDIR /app/backend
-RUN pnpm install
-RUN pnpm add -D @types/express @types/cors @types/pg
 RUN pnpm run build
 
 # Set environment variables
