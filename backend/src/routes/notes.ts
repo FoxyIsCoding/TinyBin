@@ -1,28 +1,33 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { createNote, getNoteById, getNoteByUrl } from '../queries/notes.js';
+import { makeResponse } from '../modules/Response.js';
 
 const router = Router();
 
 // Get note by URL
-router.get('/:url', async (req, res) => {
-    const { url } = req.params;
-    const note = await getNoteByUrl(url);
-    if (note) {
-        res.json(note);
-    } else {
-        res.status(404).send('Note not found');
+router.get('/:url', async (req: Request, res: Response) => {
+    try {
+        const note = await getNoteByUrl(req.params.url);
+        if (!note) {
+            return res.status(404).send(makeResponse(false, null, 'Note not found'));
+        }
+        res.send(makeResponse(true, note, 'Note retrieved successfully'));
+    } catch (error) {
+        res.status(500).send(makeResponse(false, null, 'Error retrieving note', error.message));
     }
 });
 
 // Create new note
-router.post('/add', async (req, res) => {
-    const { title, text, expiresAt } = req.body;
-    const noteId = await createNote(title, text, expiresAt ? new Date(expiresAt) : null);
-    const note = await getNoteById(noteId);
-    res.json({ id: noteId, url: note.url });
+router.post('/add', async (req: Request, res: Response) => {
+    try {
+        const note = await createNote(req.body);
+        res.status(201).send(makeResponse(true, note, 'Note created successfully'));
+    } catch (error) {
+        res.status(500).send(makeResponse(false, null, 'Error creating note', error.message));
+    }
 });
 
 export default {
-    prefix: '/api/notes',
+    prefix: '/notes',
     router
 }; 
