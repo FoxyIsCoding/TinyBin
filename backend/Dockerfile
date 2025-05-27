@@ -11,7 +11,6 @@ RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
-COPY drizzle.config.js /app/
 
 # Build
 RUN pnpm run build
@@ -27,6 +26,7 @@ RUN apk add --no-cache netcat-openbsd && \
 # Copy build output and package files
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/drizzle ./drizzle
+COPY --from=builder /app/drizzle.config.js ./
 COPY package.json pnpm-lock.yaml ./
 
 # Install production dependencies
