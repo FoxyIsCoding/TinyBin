@@ -55,4 +55,4 @@ cd /app && pnpm run db:push && node dist/index.js' > /app/start.sh && \
 EXPOSE 3000
 
 # Start the server
-CMD ["/app/start.sh"] 
+ENTRYPOINT ["/bin/sh", "/app/start.sh"] 
