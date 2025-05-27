@@ -23,15 +23,6 @@ WORKDIR /app
 RUN apk add --no-cache netcat-openbsd && \
     npm install -g pnpm
 
-# Set environment variables
-ENV PORT=3000
-ENV DB_HOST=db
-ENV DB_PORT=5432
-ENV DB_USER=postgres
-ENV DB_PASSWORD=postgres
-ENV DB_NAME=tinybin
-ENV DATABASE_URL=postgres://postgres:postgres@db:5432/tinybin
-
 # Copy build output and package files
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/drizzle ./drizzle
@@ -50,6 +41,12 @@ echo "Database is ready!"\n\
 \n\
 cd /app && pnpm run db:push && node dist/index.js' > /app/start.sh && \
     chmod +x /app/start.sh
+
+RUN printf '%s\n' \
+  '#!/bin/sh' \
+  'echo "Starting API…" ' \
+  'exec node dist/index.js' \
+  > /app/start.sh && chmod +x /app/start.sh
 
 # Expose port
 EXPOSE 3000
