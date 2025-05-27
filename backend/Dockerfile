@@ -11,7 +11,7 @@ RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
-COPY .drizzle.config.js /app/
+COPY drizzle.config.js /app/
 
 # Build
 RUN pnpm run build
@@ -33,20 +33,14 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --prod
 
 # Create start script
-RUN echo '#!/bin/sh\n\
-echo "Waiting for database..."\n\
-while ! nc -z $DB_HOST $DB_PORT; do\n\
-  sleep 1\n\
-done\n\
-echo "Database is ready!"\n\
-\n\
-cd /app && pnpm run db:push && node dist/index.js' > /app/start.sh && \
-    chmod +x /app/start.sh
-
 RUN printf '%s\n' \
   '#!/bin/sh' \
-  'echo "Starting API…" ' \
-  'exec node dist/index.js' \
+  'echo "Waiting for database..."' \
+  'while ! nc -z $DB_HOST $DB_PORT; do' \
+  '  sleep 1' \
+  'done' \
+  'echo "Database is ready!"' \
+  'cd /app && pnpm run db:push && node dist/index.js' \
   > /app/start.sh && chmod +x /app/start.sh
 
 # Expose port
