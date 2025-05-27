@@ -1,5 +1,5 @@
 # Build stage
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Install pnpm
@@ -16,14 +16,13 @@ COPY . .
 RUN pnpm run build
 
 # Production stage
-FROM node:20-alpine
+FROM node:22-alpine
 WORKDIR /app
 
 # Install pnpm
 RUN npm install -g pnpm
 
-# Copy build output and package files
-COPY --from=builder /app/build ./build
+COPY --from=builder /app/build   ./dist
 COPY package.json pnpm-lock.yaml ./
 
 # Install production dependencies and vite
