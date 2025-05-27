@@ -9,6 +9,8 @@ services:
       - backend
     environment:
       - VITE_API_URL=http://localhost:3000/api
+    networks:
+      - tinybin-network
 
   backend:
     image: ghcr.io/foxyiscoding/tinybin-backend:latest
@@ -25,6 +27,8 @@ services:
       - DB_NAME=tinybin
       - DATABASE_URL=postgres://postgres:postgres@db:5432/tinybin
       - CORS_ORIGIN=http://localhost:4173
+    networks:
+      - tinybin-network
 
   db:
     image: postgres:15-alpine
@@ -41,6 +45,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - tinybin-network
 
 volumes:
   postgres_data:
