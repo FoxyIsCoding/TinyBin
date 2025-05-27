@@ -1,14 +1,15 @@
 <script>
   import { onMount } from "svelte";
+  import { API_URL } from '$lib/config';
 
-  let commitHash = "";
+  let commit = "";
   let isLoading = true;
 
   onMount(async () => {
     try {
-      const response = await fetch("/api/commit");
+      const response = await fetch(`${API_URL}/commit`);
       const data = await response.json();
-      commitHash = data.commit;
+      commit = data.commit;
     } catch (error) {
       console.error("Failed to fetch commit hash:", error);
     } finally {
@@ -69,10 +70,10 @@
         <a href="https://github.com/foxyiscoding/tinybin" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="https://ko-fi.com/foxyiscoding" target="_blank" rel="noopener noreferrer">Support</a>
       </div>
-      {#if !isLoading && commitHash}
-        <a href="https://github.com/foxyiscoding/tinybin/commit/{commitHash}" target="_blank" rel="noopener noreferrer" class="commit-link">
+      {#if !isLoading && commit}
+        <a href="https://github.com/foxyiscoding/tinybin/commit/{commit}" target="_blank" rel="noopener noreferrer" class="commit-link">
           <i class="fab fa-github"></i>
-          {commitHash}
+          {commit}
         </a>
       {/if}
     </div>

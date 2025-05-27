@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import '../../../app.css';
   import { marked } from 'marked';
+  import { API_URL } from '$lib/config';
 
   let note: { 
     title: string; 
@@ -19,7 +20,7 @@
 
   onMount(async () => {
     try {
-      const response = await fetch(`/api/notes/${$page.params.id}`);
+      const response = await fetch(`${API_URL}/notes/${$page.params.id}`);
       if (response.ok) {
         const data = await response.json();
         console.log('API Response:', data);

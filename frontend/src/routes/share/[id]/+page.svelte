@@ -4,6 +4,7 @@
   import { goto } from '$app/navigation';
   import '../../../app.css';
   import QRCodeStyling from 'qr-code-styling';
+  import { API_URL } from '$lib/config';
 
   let note: { title: string; text: string; expiresAt: string; url: string } | null = null;
   let loading = true;
@@ -13,7 +14,7 @@
 
   onMount(async () => {
     try {
-      const response = await fetch(`/api/notes/${$page.params.id}`);
+      const response = await fetch(`${API_URL}/notes/${$page.params.id}`);
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.data) {

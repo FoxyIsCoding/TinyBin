@@ -7,6 +7,8 @@ services:
       - "4173:4173"
     depends_on:
       - backend
+    environment:
+      - VITE_API_URL=http://localhost:3000/api
 
   backend:
     image: ghcr.io/foxyiscoding/tinybin-backend:latest
@@ -22,6 +24,7 @@ services:
       - DB_PASSWORD=postgres
       - DB_NAME=tinybin
       - DATABASE_URL=postgres://postgres:postgres@db:5432/tinybin
+      - CORS_ORIGIN=http://localhost:4173
 
   db:
     image: postgres:15-alpine

@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import '../../app.css';
-    import { goto } from '$app/navigation';
+  import { goto } from '$app/navigation';
+  import { API_URL } from '$lib/config';
 
   let title = '';
   let text = '';
@@ -49,7 +50,7 @@
       const convertToTime = expireSelectionToTime(expires) * 1000;
       const expiresAt = toMySQLDateTime(new Date(Date.now() + convertToTime));
 
-      const response = await fetch('/api/notes/add', {
+      const response = await fetch(`${API_URL}/notes/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
