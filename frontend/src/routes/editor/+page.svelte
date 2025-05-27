@@ -192,6 +192,7 @@
     padding: 0.5rem;
     border: 1px solid var(--border-color);
     margin-bottom: 1rem;
+    width: 100%;
   }
 
   .expiration-radio-group {
@@ -199,6 +200,8 @@
     display: flex;
     gap: 0.5rem;
     padding: 0.25rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 
   .expiration-slider {
@@ -227,6 +230,7 @@
     font-size: 0.9rem;
     min-width: 3rem;
     text-align: center;
+    flex: 1;
   }
 
   .expiration-radio-group input[type="radio"]:checked + label {
@@ -234,7 +238,7 @@
     font-weight: 500;
   }
 
-  /* Slider positions */
+  /* Slider positions - updated for responsive layout */
   .expiration-radio-group input[type="radio"][value="3h"]:checked ~ .expiration-slider {
     left: 0.25rem;
     width: calc(25% - 0.5rem);
@@ -253,6 +257,50 @@
   .expiration-radio-group input[type="radio"][value="1m"]:checked ~ .expiration-slider {
     left: calc(75% + 0.25rem);
     width: calc(25% - 0.5rem);
+  }
+
+  @media (max-width: 768px) {
+    .editor-options {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: 0;
+      border-radius: 16px 16px 0 0;
+      width: 100%;
+      padding: 1rem;
+    }
+
+    .expiration-radio-group {
+      gap: 0.25rem;
+    }
+
+    .expiration-radio-group label {
+      padding: 0.4rem 0.5rem;
+      font-size: 0.8rem;
+      min-width: 2.5rem;
+    }
+
+    .expiration-slider {
+      display: none; /* Hide slider on mobile for better UX */
+    }
+
+    .expiration-radio-group input[type="radio"]:checked + label {
+      background-color: var(--primary-color);
+      color: white;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .editor-options {
+      padding: 0.75rem;
+    }
+
+    .expiration-radio-group label {
+      padding: 0.3rem 0.4rem;
+      font-size: 0.75rem;
+      min-width: 2rem;
+    }
   }
 
   .buttons {
@@ -304,17 +352,5 @@
 
   .button-46:not(:disabled):active {
     transform: translateY(0);
-  }
-
-  @media (max-width: 768px) {
-    .editor-options {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: 0;
-      border-radius: 16px 16px 0 0;
-      width: 100%;
-    }
   }
 </style> 
