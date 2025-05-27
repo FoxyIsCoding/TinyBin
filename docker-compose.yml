@@ -27,7 +27,6 @@ services:
       - DB_NAME=tinybin
       - DATABASE_URL=postgres://postgres:postgres@db:5432/tinybin
       - CORS_ORIGIN=http://localhost:4173
-      - RUN_MIGRATIONS=true
     command: >
       sh -c "
         echo 'Waiting for database...' &&
@@ -35,7 +34,8 @@ services:
           sleep 1
         done &&
         echo 'Database is up!' &&
-        npm run migrate &&
+        npm run db:push &&
+        npm run drizzle-kit generate &&
         npm start
       "
     networks:

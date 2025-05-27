@@ -11,6 +11,7 @@ RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
+COPY .drizzle.config.js /app/
 
 # Build
 RUN pnpm run build
