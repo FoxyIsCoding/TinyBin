@@ -25,6 +25,11 @@ RUN apk add --no-cache netcat-openbsd && \
 
 # Set environment variables
 ENV PORT=3000
+ENV DB_HOST=db
+ENV DB_PORT=5432
+ENV DB_USER=postgres
+ENV DB_PASSWORD=postgres
+ENV DB_NAME=tinybin
 ENV DATABASE_URL=postgres://postgres:postgres@db:5432/tinybin
 
 # Copy build output and package files
@@ -43,7 +48,7 @@ while ! nc -z $DB_HOST $DB_PORT; do\n\
 done\n\
 echo "Database is ready!"\n\
 \n\
-pnpm run db:push && node dist/index.js' > /app/start.sh && \
+cd /app && pnpm run db:push && node dist/index.js' > /app/start.sh && \
     chmod +x /app/start.sh
 
 # Expose port

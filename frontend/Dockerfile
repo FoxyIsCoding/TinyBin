@@ -26,11 +26,12 @@ RUN npm install -g pnpm
 COPY --from=builder /app/build ./build
 COPY package.json pnpm-lock.yaml ./
 
-# Install production dependencies
-RUN pnpm install --prod
+# Install production dependencies including vite
+RUN pnpm install --prod && \
+    pnpm add -g vite
 
 # Expose port
 EXPOSE 4173
 
 # Start the preview server
-CMD ["pnpm", "preview", "--host", "0.0.0.0", "--port", "4173"] 
+CMD ["vite", "preview", "--host", "0.0.0.0", "--port", "4173"] 
