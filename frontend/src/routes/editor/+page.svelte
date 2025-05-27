@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import '../../app.css';
+    import { goto } from '$app/navigation';
 
   let title = '';
   let text = '';
@@ -63,7 +64,7 @@
 
       const data = await response.json();
       if (data.success && data.data && data.data.url) {
-        window.location.href = `/share/${data.data.url}`;
+        goto(`/share/${data.data.url}`);
       } else {
         throw new Error('Invalid response format');
       }

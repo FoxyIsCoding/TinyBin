@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
   import '../../../app.css';
   import QRCodeStyling from 'qr-code-styling';
 
@@ -69,7 +70,7 @@
   }
 
   function openNote() {
-    window.location.href = shareLink;
+    goto(shareLink);
   }
 </script>
 
