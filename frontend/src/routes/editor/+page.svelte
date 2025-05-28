@@ -16,6 +16,18 @@
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
   }
 
+  function updateLenght() {
+    const lenght = text.length;
+    const lenghtElement = document.getElementById('lenght');
+    if (lenghtElement) {
+      lenghtElement.innerHTML = `${lenght}/2000`;
+    }
+  }
+
+  onMount(() => {
+    updateLenght();
+    document.querySelector('textarea')?.addEventListener('input', updateLenght);
+  })
   function expireSelectionToTime(expireSelection: string): number {
     let expireTime: number;
     switch (expireSelection) {
@@ -88,14 +100,17 @@
   <input 
     bind:value={title}
     type="text" 
+    maxlength="255"
     placeholder="Title" 
   />
   <textarea 
     bind:value={text}
     rows="10" 
     cols="30" 
+    maxlength="2000"
     placeholder="Note text"
   ></textarea>
+  <p id="lenght">0/2000</p>
 </div>
 
 <section class="editor-options glass-card">
