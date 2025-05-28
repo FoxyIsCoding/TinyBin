@@ -27,6 +27,7 @@ RUN apk add --no-cache netcat-openbsd && \
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/drizzle ./drizzle
 COPY --from=builder /app/drizzle.config.js ./
+COPY --from=builder /app/src/db ./src/db
 COPY package.json pnpm-lock.yaml ./
 
 # Install production dependencies
@@ -47,4 +48,4 @@ RUN printf '%s\n' \
 EXPOSE 3000
 
 # Start the server
-ENTRYPOINT ["/bin/sh", "/app/start.sh"] 
+ENTRYPOINT ["/bin/sh", "/app/start.sh"]
