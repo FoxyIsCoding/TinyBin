@@ -76,7 +76,7 @@ Your support keeps PasteFox ad-free and open source.
 
 ## 📄 License
 
-MIT
+Apache License, Version 2.0
 
 ---
 
