@@ -15,7 +15,7 @@ export default defineConfig({
 	},
 	preview: {
 		host: '0.0.0.0',
-		allowedHosts: ['tinybin.fun'], 
+		allowedHosts: true, 
 		port: 4173,
 		strictPort: true,
 		headers: {
