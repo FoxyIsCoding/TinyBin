@@ -19,5 +19,5 @@
         "dist/**/*", 
         "node_modules/**/*"
     ],
-    "include": ["backend/**/**.ts", "frontend/**/**.ts", "frontend/vite.config.js"]
+    "include": ["backend/**/**.ts", "frontend/**/**.ts", "frontend/vite.config.js", "backend/dist/db/schema.js"]
 }
