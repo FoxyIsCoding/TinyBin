@@ -24,10 +24,10 @@ RUN npm install -g pnpm
 
 COPY --from=builder /app/build   ./dist
 COPY package.json pnpm-lock.yaml ./
+COPY vite.config.js ./
 
 # Install production dependencies and vite
-RUN pnpm install --prod && \
-    pnpm add vite@latest
+RUN pnpm install --prod
 
 # Expose port
 EXPOSE 4173
