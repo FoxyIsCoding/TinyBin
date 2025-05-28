@@ -5,7 +5,7 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	server: {
 		host: true,
-		allowedHosts: ['tinybin.fun'], 
+		allowedHosts: 'all',
 		proxy: {
 			'/api': {
 				target: 'http://localhost:3000',
@@ -15,11 +15,11 @@ export default defineConfig({
 	},
 	preview: {
 		host: '0.0.0.0',
-		allowedHosts: ['tinybin.fun'],
+		allowedHosts: 'all',
 		port: 4173,
 		strictPort: true,
 		headers: {
-			'Access-Control-Allow-Origin': 'https://tinybin.fun'
+			'Access-Control-Allow-Origin': '*'
 		}
 	}
 });
