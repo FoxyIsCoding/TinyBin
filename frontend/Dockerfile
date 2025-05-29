@@ -30,7 +30,7 @@ COPY vite.config.js ./
 RUN pnpm install --prod
 
 # Expose port
-EXPOSE 4173
+EXPOSE 4174
 
 # Start the preview server
 CMD ["pnpm", "exec", "vite", "preview", "--host", "0.0.0.0", "--port", "4173"] 

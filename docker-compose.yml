@@ -4,7 +4,7 @@ services:
   frontend:
     image: ghcr.io/foxyiscoding/tinybin-frontend:latest
     ports:
-      - "4173:4173"
+      - "4174:4174"
     depends_on:
       - backend
     environment:
@@ -15,7 +15,7 @@ services:
   backend:
     image: ghcr.io/foxyiscoding/tinybin-backend:latest
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
       db:
         condition: service_healthy
@@ -26,7 +26,7 @@ services:
       - DB_PASSWORD=postgres
       - DB_NAME=tinybin
       - DATABASE_URL=postgres://postgres:postgres@db:5432/tinybin
-      - CORS_ORIGIN=http://localhost:4173
+      - CORS_ORIGIN=http://localhost:4174
     command: >
       sh -c "
         echo 'Waiting for database...' &&
