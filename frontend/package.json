@@ -28,6 +28,7 @@
 	},
 	"dependencies": {
 		"@types/marked": "^6.0.0",
+		"highlight.js": "^11.11.1",
 		"marked": "^15.0.12",
 		"qr-code-styling": "^1.9.2"
 	}

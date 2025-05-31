@@ -12,6 +12,7 @@ RUN pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
+
 # Build
 RUN pnpm run build
 
@@ -45,7 +46,7 @@ RUN printf '%s\n' \
   > /app/start.sh && chmod +x /app/start.sh
 
 # Expose port
-EXPOSE 3001
+EXPOSE 3000
 
 # Start the server
 ENTRYPOINT ["/bin/sh", "/app/start.sh"]

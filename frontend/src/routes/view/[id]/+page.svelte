@@ -2,8 +2,10 @@
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import '../../../app.css';
+  import 'highlight.js/styles/github-dark.css';
   import { marked } from 'marked';
   import { API_URL } from '$lib/config';
+  import hljs from 'highlight.js';
 
   let note: { 
     title: string; 
@@ -11,26 +13,91 @@
     expires_at: string; 
     created_at: string;
     url: string;
+    language?: string;
   } | null = null;
   let loading = true;
   let error = '';
   let renderedContent = '';
   let copySuccess = false;
   let timeLeft = '';
+  let detectedLanguage = '';
+
+  function detectLanguage(text: string): string {
+    // First try to detect the language using highlight.js
+    const result = hljs.highlightAuto(text);
+    if (result.language) {
+      return result.language;
+    }
+
+    // If no language detected, try to detect based on file extensions in the text
+    const extensionPatterns = {
+      'javascript': /\.(js|jsx|mjs)$/i,
+      'typescript': /\.(ts|tsx)$/i,
+      'python': /\.(py|pyw)$/i,
+      'java': /\.(java|class)$/i,
+      'csharp': /\.(cs)$/i,
+      'cpp': /\.(cpp|cxx|cc|hpp|hxx|hh)$/i,
+      'php': /\.(php|phtml)$/i,
+      'ruby': /\.(rb|ruby)$/i,
+      'go': /\.(go)$/i,
+      'rust': /\.(rs)$/i,
+      'html': /\.(html|htm)$/i,
+      'css': /\.(css)$/i,
+      'sql': /\.(sql)$/i,
+      'json': /\.(json)$/i,
+      'yaml': /\.(yaml|yml)$/i,
+      'xml': /\.(xml)$/i,
+      'markdown': /\.(md|markdown)$/i
+    };
+
+    for (const [lang, pattern] of Object.entries(extensionPatterns)) {
+      if (pattern.test(text)) {
+        return lang;
+      }
+    }
+
+    if (text.includes('<?php')) return 'php';
+    if (text.includes('<!DOCTYPE html>') || text.includes('<html')) return 'html';
+    if (text.includes('import React') || text.includes('from "react"')) return 'javascript';
+    if (text.includes('import {') && text.includes('} from')) return 'typescript';
+    if (text.includes('def ') && text.includes(':')) return 'python';
+    if (text.includes('public class')) return 'java';
+    if (text.includes('namespace')) return 'csharp';
+    if (text.includes('#include')) return 'cpp';
+    if (text.includes('package main')) return 'go';
+    if (text.includes('fn ')) return 'rust';
+    if (text.includes('SELECT') && text.includes('FROM')) return 'sql';
+    if (text.includes('{') && text.includes('}') && text.includes('"')) return 'json';
+    if (text.includes('---') && text.includes(':')) return 'yaml';
+
+    return 'plaintext';
+  }
+
+  function formatCode(text: string, language: string): string {
+    try {
+      if (language === 'markdown') {
+        return marked.parse(text, { async: false }) as string;
+      }
+      
+      const highlighted = hljs.highlight(text, { language }).value;
+      return `<pre><code class="hljs language-${language}">${highlighted}</code></pre>`;
+    } catch (err) {
+      console.error('Error highlighting code:', err);
+      return `<pre><code>${text}</code></pre>`;
+    }
+  }
 
   onMount(async () => {
     try {
       const response = await fetch(`${API_URL}/notes/${$page.params.id}`);
       if (response.ok) {
         const data = await response.json();
-        console.log('API Response:', data);
         if (data.success && data.data) {
           note = data.data;
-          console.log('Note data:', note);
           if (note) {
-            renderedContent = marked.parse(note.text, { async: false }) as string;
+            detectedLanguage = detectLanguage(note.text);
+            renderedContent = formatCode(note.text, detectedLanguage);
             updateTimeLeft();
-            // Update time left every second
             setInterval(updateTimeLeft, 1000);
           }
         } else {
@@ -137,14 +204,14 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </svelte:head>
 
-<div class="view">
+<div class="container">
   {#if loading}
-    <div class="loading">
+    <div class="loading glass-card">
       <i class="fa-solid fa-spinner fa-spin fa-2xl"></i>
       <p>Loading...</p>
     </div>
   {:else if error}
-    <div class="error-container">
+    <div class="error-container glass-card">
       <i class="fa-solid fa-circle-exclamation fa-2xl"></i>
       <p class="error">{error}</p>
     </div>
@@ -185,44 +252,53 @@
 </div>
 
 <style>
-  .view {
-    max-width: 100%;
+  .container {
+    max-width: 800px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 2rem 1rem;
+    min-height: 100vh;
   }
 
   .loading, .error-container {
     text-align: center;
-    margin: 2rem 0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
   }
 
   .loading i, .error-container i {
-    margin-bottom: 1rem;
+    color: var(--primary-color);
   }
 
   .error-container i {
-    color: #ff4444;
+    color: var(--error-color);
   }
 
   .note {
-    padding: 2rem;
-    height: calc(100vh - 4rem);
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
   }
 
   .note-header {
-    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 1.5rem;
   }
 
   .title-section {
-    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   h1 {
-    font-size: 2rem;
-    color: white;
-    margin: 0 0 1rem 0;
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 600;
   }
 
   .meta-info {
@@ -230,7 +306,7 @@
     flex-wrap: wrap;
     gap: 1.5rem;
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.875rem;
   }
 
   .meta-item {
@@ -241,6 +317,7 @@
 
   .meta-item i {
     color: var(--primary-color);
+    font-size: 0.875rem;
   }
 
   .link-button {
@@ -249,10 +326,11 @@
     color: var(--text-secondary);
     cursor: pointer;
     padding: 0;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    transition: color 0.2s ease;
   }
 
   .link-button:hover {
@@ -260,118 +338,130 @@
   }
 
   .content {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 1.5rem;
-    color: white;
-    flex: 1;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-size: 1rem;
+    overflow-wrap: break-word;
   }
 
-  .content::-webkit-scrollbar {
-    width: 8px;
+  .content :global(h1) {
+    font-size: 1.75rem;
+    margin: 1.5rem 0 1rem;
   }
 
-  .content::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
+  .content :global(h2) {
+    font-size: 1.5rem;
+    margin: 1.25rem 0 0.75rem;
   }
 
-  .content::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
-    border: 2px solid rgba(0, 0, 0, 0.3);
-  }
-
-  .content::-webkit-scrollbar-thumb:hover {
-    background: #4a90e2;
+  .content :global(h3) {
+    font-size: 1.25rem;
+    margin: 1rem 0 0.5rem;
   }
 
   .content :global(p) {
-    margin: 0 0 1rem 0;
-    line-height: 1.6;
+    margin: 0.75rem 0;
+  }
+
+  .content :global(ul), .content :global(ol) {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .content :global(li) {
+    margin: 0.25rem 0;
+  }
+
+  .content :global(code) {
+    background: var(--card-background);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
   }
 
   .content :global(pre) {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--card-background);
     padding: 1rem;
     border-radius: 8px;
     overflow-x: auto;
     margin: 1rem 0;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.2);
   }
 
-  .content :global(pre::-webkit-scrollbar) {
-    height: 8px;
-  }
-
-  .content :global(pre::-webkit-scrollbar-track) {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-  }
-
-  .content :global(pre::-webkit-scrollbar-thumb) {
-    background: var(--primary-color);
-    border-radius: 4px;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-  }
-
-  .content :global(pre::-webkit-scrollbar-thumb:hover) {
-    background: #4a90e2;
-  }
-
-  .content :global(code) {
-    font-family: monospace;
+  .content :global(pre code) {
+    background: none;
+    padding: 0;
+    font-size: 0.875rem;
   }
 
   .content :global(blockquote) {
     border-left: 4px solid var(--primary-color);
     margin: 1rem 0;
     padding: 0.5rem 0 0.5rem 1rem;
-    color: #b0b0b0;
+    color: var(--text-secondary);
   }
 
   .content :global(a) {
     color: var(--primary-color);
     text-decoration: none;
+    transition: color 0.2s ease;
   }
 
   .content :global(a:hover) {
     text-decoration: underline;
   }
 
-  .content :global(ul), .content :global(ol) {
+  .content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
     margin: 1rem 0;
-    padding-left: 2rem;
   }
 
-  .content :global(li) {
-    margin: 0.5rem 0;
+  .content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
   }
 
-  .error {
-    color: #ff4444;
-    text-align: center;
-    font-size: 1.2rem;
+  .content :global(th), .content :global(td) {
+    border: 1px solid var(--card-border);
+    padding: 0.5rem;
+    text-align: left;
+  }
+
+  .content :global(th) {
+    background: var(--card-background);
+    font-weight: 500;
   }
 
   @media (max-width: 768px) {
-    .view {
-      padding: 1rem;
+    .container {
+      padding: 1rem 0.5rem;
     }
 
     .note {
-      padding: 1.5rem;
-      height: calc(100vh - 2rem);
+      padding: 1rem;
     }
 
     .meta-info {
-      flex-direction: column;
-      gap: 0.5rem;
+      gap: 1rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .content :global(h1) {
+      font-size: 1.5rem;
+    }
+
+    .content :global(h2) {
+      font-size: 1.25rem;
+    }
+
+    .content :global(h3) {
+      font-size: 1.1rem;
     }
   }
 </style> 

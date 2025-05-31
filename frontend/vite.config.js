@@ -8,14 +8,14 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         changeOrigin: true
       }
     }
   },
   preview: {
     host: '0.0.0.0',
-    port: 4174,
+    port: 4173,
     strictPort: true,
     allowedHosts: true,
     headers: {
