@@ -1,36 +1,25 @@
-# Build stage
-FROM node:22-alpine AS builder
-WORKDIR /app
+FROM node:23-alpine AS build
 
-# Install pnpm
-RUN npm install -g pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
+WORKDIR /tinybin-frontend
+
+COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile
 
-# Copy source code
 COPY . .
+RUN pnpm build
 
-# Build
-RUN pnpm run build
+FROM node:23-alpine
 
-# Production stage
-FROM node:22-alpine
-WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Install pnpm
-RUN npm install -g pnpm
+WORKDIR /tinybin-frontend
 
-COPY --from=builder /app/build   ./dist
-COPY package.json pnpm-lock.yaml ./
-COPY vite.config.js ./
+COPY --from=build /tinybin-frontend /tinybin-frontend
 
-# Install production dependencies and vite
-RUN pnpm install --prod
+RUN CI=1 pnpm install --prod --frozen-lockfile
 
-# Expose port
-EXPOSE 4173
+EXPOSE 3000
 
-# Start the preview server
-CMD ["pnpm", "exec", "vite", "preview", "--host", "0.0.0.0", "--port", "4173"] 
+CMD ["node", "build"]
