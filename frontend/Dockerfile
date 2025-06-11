@@ -4,9 +4,6 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /tinybin-frontend
 
-ARG COMMIT_HASH
-ARG RAILWAY_GIT_COMMIT_SHA
-
 COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile
 
@@ -23,6 +20,6 @@ COPY --from=build /tinybin-frontend /tinybin-frontend
 
 RUN CI=1 pnpm install --prod --frozen-lockfile
 
-EXPOSE 80
+EXPOSE 3000
 
 CMD ["node", "build"]
