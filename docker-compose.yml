@@ -1,21 +1,19 @@
-version: '3.8'
-
 services:
   frontend:
     image: ghcr.io/foxyiscoding/tinybin-frontend:latest
     ports:
-      - "4173:4173"
+      - "3000:3000"
     depends_on:
       - backend
     environment:
-      - VITE_API_URL=http://localhost:3000/api
+      - VITE_API_URL=http://localhost:3001/api
     networks:
       - tinybin-network
 
   backend:
     image: ghcr.io/foxyiscoding/tinybin-backend:latest
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
       db:
         condition: service_healthy
@@ -26,7 +24,7 @@ services:
       - DB_PASSWORD=postgres
       - DB_NAME=tinybin
       - DATABASE_URL=postgres://postgres:postgres@db:5432/tinybin
-      - CORS_ORIGIN=http://localhost:4173
+      - CORS_ORIGIN=http://localhost:3000
     command: >
       sh -c "
         echo 'Waiting for database...' &&

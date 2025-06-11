@@ -45,8 +45,6 @@ RUN printf '%s\n' \
   'cd /app && pnpm run db:push && node dist/index.js' \
   > /app/start.sh && chmod +x /app/start.sh
 
-# Expose port
-EXPOSE 3000
+EXPOSE 3001
 
-# Start the server
 ENTRYPOINT ["/bin/sh", "/app/start.sh"]

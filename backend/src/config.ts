@@ -8,7 +8,7 @@ interface Config {
 }
 
 const config: Config = {
-    port: parseInt(process.env.PORT || '3000'),
+    port: parseInt(process.env.PORT || '3001'),
     database_url: process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/tinybin',
     node_env: process.env.NODE_ENV || 'development'
 };
