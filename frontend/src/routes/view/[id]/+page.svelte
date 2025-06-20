@@ -95,7 +95,7 @@
         if (data.success && data.data) {
           note = data.data;
           if (note) {
-            detectedLanguage = detectLanguage(note.text);
+            detectedLanguage = note.language || 'plaintext';
             renderedContent = formatCode(note.text, detectedLanguage);
             updateTimeLeft();
             setInterval(updateTimeLeft, 1000);

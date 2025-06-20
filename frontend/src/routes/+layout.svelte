@@ -73,11 +73,14 @@
 
   nav {
     background: var(--background-secondary);
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem 0;
+    border-bottom: none;
+    box-shadow: none;
+    padding: 0.7rem 0;
     position: sticky;
     top: 0;
     z-index: 100;
+    backdrop-filter: blur(12px) saturate(120%);
+    background-color: rgba(9,9,10,0.85);
   }
 
   .nav-content {
@@ -90,13 +93,14 @@
   }
 
   .logo {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--primary-color);
     display: flex;
     align-items: center;
     gap: 0.5rem;
     z-index: 101;
+    letter-spacing: -0.01em;
   }
 
   .logo i {
@@ -116,18 +120,24 @@
 
   .links {
     display: flex;
-    gap: 1.5rem;
+    gap: 1.2rem;
     align-items: center;
+    background: none;
+    box-shadow: none;
   }
 
   .nav-link {
     color: var(--text-secondary);
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
   }
 
   .nav-link:hover {
-    color: var(--text-primary);
+    color: var(--primary-color);
+    background: #181819;
+    box-shadow: 0 0 8px 2px rgba(255,255,255,0.08);
   }
 
   main {
@@ -156,6 +166,7 @@
       gap: 2rem;
       transition: right 0.3s ease;
       z-index: 100;
+      box-shadow: none;
     }
 
     .links.open {
@@ -163,7 +174,7 @@
     }
 
     .nav-link {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       padding: 0.5rem 1rem;
     }
 
