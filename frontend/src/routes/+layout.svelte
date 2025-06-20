@@ -1,4 +1,5 @@
 <script>
+
   import "../app.css";
   import { onMount } from "svelte";
 
@@ -171,4 +172,4 @@
       right: 4rem;
     }
   }
-</style> 
+</style>
