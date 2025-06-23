@@ -1,9 +1,6 @@
 import { customAlphabet } from 'nanoid';
 // NO DB CALLS OUTSIDE OF QUERIES FUNCTIONS!!!
 
-// Tf does this file do?
-
-
 // dont have to explain this one
 // this is a function to generate a random id for the notes
 // frick i explained it anyways damm

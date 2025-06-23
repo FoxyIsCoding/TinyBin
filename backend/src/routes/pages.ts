@@ -35,7 +35,7 @@ router.get('/share/:url', async (req: Request, res: Response): Promise<void> => 
     }
 });
 
-// Editor page
+// umm veri gud editor page
 router.get('/new', (req: Request, res: Response): void => {
     res.send(makeResponse(true, null, 'New note page'));
 });

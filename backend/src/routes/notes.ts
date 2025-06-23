@@ -4,6 +4,8 @@ import { makeResponse } from '../modules/Response.js';
 
 const router = Router();
 
+// backend logic prob
+
 // Get note by URL
 router.get('/:url', async (req: Request, res: Response): Promise<void> => {
     try {
