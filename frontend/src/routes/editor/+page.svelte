@@ -596,6 +596,7 @@
 
   .language-button {
     width: 100%;
+    height: 150%;
     background-color: var(--card-background);
     border: 1px solid var(--card-border);
     padding: 0.75rem 1rem;
@@ -677,7 +678,7 @@
 
   .language-option.selected {
     background: var(--primary-color);
-    color: white;
+    color: rgb(0, 0, 0);
   }
 
   .buttons {

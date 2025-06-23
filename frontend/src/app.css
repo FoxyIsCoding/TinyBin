@@ -2,21 +2,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
 
 :root {
-  /* Ultra Dark Minimal theme */
-  --background-primary: #050505;
-  --background-secondary: #09090a;
-  --background-tertiary: #131314;
+  /* veri gud theme */
+  --background-primary: #030303;
+  --background-secondary: #050505;
+  --background-tertiary: #0a0a0b;
   --text-primary: #f3f4f6;
-  --text-secondary: #a1a1aa;
-  --border-color: #18181a;
+  --text-secondary: #8b8b93;
+  --border-color: #111112;
   --primary-color: #fff;
   --primary-hover: #fff;
   --error-color: #ef4444;
   --success-color: #22c55e;
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', 'Consolas', monospace;
-  --card-background: #09090a;
-  --card-border: #18181a;
+  --card-background: #050505;
+  --card-border: #111112;
   --transition-speed: 0.2s;
   --border-radius: 10px;
   --spacing-unit: 1rem;
@@ -168,7 +168,7 @@ input:focus, textarea:focus, select:focus {
 
 .glass-card:hover {
   border-color: var(--primary-color);
-  background: #181819cc;
+  background: #0c0c0ccc;
   box-shadow: 0 0 8px 2px rgba(255,255,255,0.08);
 }
 
@@ -353,7 +353,7 @@ p {
 
 /* Selection */
 ::selection {
-  background: var(--primary-color);
+  background: #13131367;
   color: white;
 }
 
@@ -508,4 +508,4 @@ p {
 }
 [data-theme="light"] .commit-link, [data-theme="light"] .commit-link a {
   color: #444a57;
-} 
+}
